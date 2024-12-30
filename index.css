@@ -10,7 +10,7 @@ body {
     color: black;
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
     margin: 0;
-    padding: 100;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,11 +21,33 @@ body {
 
 .div-block-4 {
     text-align: center;
-    padding-top: 20px; /* Add padding from the top */
+    padding-top: 200px; /* Add padding from the top */
 }
 
 .div-block-4 img {
-    width: 50%; /* Adjust the width as needed */
+    width: 80%; /* Adjust the width as needed */
     max-width: 1600px; /* Optional: set a maximum width */
     height: auto; /* Maintain aspect ratio */
+}
+
+.align-horizontal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3px; /* Adjust spacing between groups */
+}
+
+.text-left, .text-right {
+    flex: 1;
+    text-align: right;
+}
+
+.text-right {
+    text-align: left;
+}
+
+.slash {
+    margin: 0 5px; /* Adjust spacing around the slash */
+    display: flex;
+    align-items: center;
 }
