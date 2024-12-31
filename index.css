@@ -9,37 +9,44 @@ body {
     background-color: white;
     color: black;
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
+    font-size: 16px; /* Set a consistent font size */
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Align items to the top */
     min-height: 100vh; /* Minimum height to allow scrolling */
     text-align: center;
     overflow-y: auto; /* Enable vertical scrolling */
+    position: relative;
+}
+
+.page-title {
+    margin-top: 50px; /* Ensure consistent title height */
+    font-size: 16px; /* Set the same font size as the body */
 }
 
 .div-block-4 {
     text-align: center;
-    padding-top: 200px; /* Add padding from the top */
-}
-
-.div-block-4 img {
-    width: 80%; /* Adjust the width as needed */
-    max-width: 1600px; /* Optional: set a maximum width */
-    height: auto; /* Maintain aspect ratio */
+    position: relative;
+    z-index: 1; /* Ensure text is above the image */
+    padding: 20px; /* Adjust padding as needed */
+    width: 100%; /* Adjust width as needed */
+    max-width: 1200px; /* Optional: set a maximum width */
+    margin: 0 auto; /* Center the div horizontally */
 }
 
 .align-horizontal {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 3px; /* Adjust spacing between groups */
+    width: 100%; /* Ensure the align-horizontal div takes full width */
 }
 
 .text-left, .text-right {
     flex: 1;
     text-align: right;
+    font-size: 16px; /* Ensure the same font size */
 }
 
 .text-right {
@@ -50,4 +57,17 @@ body {
     margin: 0 5px; /* Adjust spacing around the slash */
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex: 0 0 5px; /* Fixed width for the slash to center it */
+    font-size: 16px; /* Ensure the same font size */
+}
+
+a {
+    color: rgb(0, 0, 0); /* Set link color to red */
+    text-decoration: none; /* Remove underline */
+    font-size: 16px; /* Ensure the same font size */
+}
+
+a:hover {
+    text-decoration: underline; /* Add underline on hover */
 }
