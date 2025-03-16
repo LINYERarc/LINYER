@@ -29,7 +29,6 @@ body {
 .div-block-4 {
     text-align: center;
     position: relative;
-    z-index: 1; /* Ensure text is above the image */
     width: 100%; /* Adjust width as needed */
     max-width: 1200px; /* Optional: set a maximum width */
     margin: 0 auto; /* Center the div horizontally */
