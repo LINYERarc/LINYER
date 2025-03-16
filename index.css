@@ -6,8 +6,8 @@
 }
 
 body {
-    background-color: white;
-    color: black;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
     font-size: 16px; /* Set a consistent font size */
     margin: 0;
@@ -30,10 +30,13 @@ body {
     text-align: center;
     position: relative;
     z-index: 1; /* Ensure text is above the image */
-    padding: 20px; /* Adjust padding as needed */
     width: 100%; /* Adjust width as needed */
     max-width: 1200px; /* Optional: set a maximum width */
     margin: 0 auto; /* Center the div horizontally */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    height: 100vh; /* Make the div take the full height of the viewport */
 }
 
 .align-horizontal {
@@ -63,7 +66,7 @@ body {
 }
 
 a {
-    color: rgb(0, 0, 0); /* Set link color to red */
+    color: rgb(255, 255, 255); /* Set link color to red */
     text-decoration: none; /* Remove underline */
     font-size: 16px; /* Ensure the same font size */
 }
