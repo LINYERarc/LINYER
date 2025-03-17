@@ -77,13 +77,15 @@ a:hover {
 .title-left {
     color: rgb(0, 0, 255); /* Set color to blue */
     flex: 1;
+    font-weight: bold;
     text-align: right;
-    font-size: 85px; /* Ensure the same font size */
+    font-size: 32px; /* Ensure the same font size */
 }
 
 .title-right {
     color: rgb(255, 0, 0); /* Set color to blue */
     flex: 1;
     text-align: left;
-    font-size: 85px; /* Ensure the same font size */
+    font-weight: bold;
+    font-size: 32px; /* Ensure the same font size */
 }
