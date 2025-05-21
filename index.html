@@ -6,17 +6,21 @@
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link rel="stylesheet" href="index.css">
     <style>
-        body {
-            background: linear-gradient(to right, rgb(255, 255, 0) 50%, rgb(255, 255, 0) 50%);
-        }
     </style>
+     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const colors = ["rgb(255, 0, 0)", "rgb(0, 0, 255)", "rgb(255, 255, 0)", "rgb(0, 128, 0)"]; // Red, Blue, Yellow
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.style.backgroundColor = randomColor;
+        });
+    </script>
 </head>
 <body class="body">
     <div class="div-block-4">
         <div class="text-block-6">
             <div class="align-horizontal">
                 <div class="title-left">L I N </div>
-                <div class="slash"> </div>
+                <div class="slash"></div>
                 <div class="title-right">Y E R</div>
             </div>
             <br/>

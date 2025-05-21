@@ -67,7 +67,7 @@ body {
 
 a {
     text-decoration: none; /* Remove underline */
-    color: rgb(255, 0, 0); /* Set color to white */
+    color: rgb(0, 0, 0); /* Set color to white */
 }
 
 a:hover {
