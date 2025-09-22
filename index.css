@@ -17,40 +17,28 @@
 
 @media (max-width: 600px) {
     .linyer-tab {
-        flex-direction: column;
-        align-items: stretch;
         padding: 8px 0;
     }
-    .linyer-tab-section {
-        justify-content: center !important;
-        margin: 0 !important;
-        gap: 8px;
-    }
     .linyer-tab-link {
-        font-size: 1.2rem;
+        font-size: 1rem;
         letter-spacing: 1px;
-        padding: 4px 0;
+        padding: 2px 0;
     }
     .tab-slash {
-        font-size: 1.2rem;
-        margin: 0 4px;
+        font-size: 1rem;
+        margin: 0 2px;
     }
     .div-block-4 {
         max-width: 100vw;
-        padding: 0 8px;
+        padding: 0 4px;
         height: auto;
     }
     img {
         max-width: 100vw;
         height: auto;
     }
-    .align-horizontal {
-        flex-direction: column;
-        gap: 2px;
-    }
     .text-left, .text-right {
-        font-size: 1rem;
-        text-align: center;
+        font-size: 0.9rem;
     }
 }
 @font-face {
