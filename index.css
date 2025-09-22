@@ -1,3 +1,58 @@
+.linyer-tab-link {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+    letter-spacing: 2px;
+    font-family: 'Avenir', Arial, Helvetica, sans-serif;
+}
+.linyer-tab-link:hover {
+    color: #555;
+}
+.tab-slash {
+    font-size: 2rem;
+    color: #000;
+    margin: 0 8px;
+}
+
+@media (max-width: 600px) {
+    .linyer-tab {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 8px 0;
+    }
+    .linyer-tab-section {
+        justify-content: center !important;
+        margin: 0 !important;
+        gap: 8px;
+    }
+    .linyer-tab-link {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+        padding: 4px 0;
+    }
+    .tab-slash {
+        font-size: 1.2rem;
+        margin: 0 4px;
+    }
+    .div-block-4 {
+        max-width: 100vw;
+        padding: 0 8px;
+        height: auto;
+    }
+    img {
+        max-width: 100vw;
+        height: auto;
+    }
+    .align-horizontal {
+        flex-direction: column;
+        gap: 2px;
+    }
+    .text-left, .text-right {
+        font-size: 1rem;
+        text-align: center;
+    }
+}
 @font-face {
     font-family: 'Avenir';
     src: url('/Users/lgujer/Desktop/015_Website_LINYER/001_VScode/Avenir.ttc') format('truetype');
