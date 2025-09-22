@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: rgb(0, 0, 0);
+    background-color: #fff;
     color: rgb(0, 0, 0);
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
     font-size: 16px; /* Set a consistent font size */
@@ -88,4 +88,51 @@ a:hover {
     text-align: left;
     font-weight: bold;
     font-size: 32px; /* Ensure the same font size */
+}
+
+.linyer-tab {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    padding: 12px 0 12px 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.linyer-tab-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+.linyer-tab-left {
+    justify-content: flex-start;
+    margin-left: 24px;
+}
+.linyer-tab-center {
+    justify-content: center;
+}
+.linyer-tab-right {
+    justify-content: flex-end;
+    margin-right: 32px;
+    gap: 16px;
+}
+.linyer-tab-link {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+    letter-spacing: 2px;
+    font-family: 'Avenir', Arial, Helvetica, sans-serif;
+}
+.linyer-tab-link:hover {
+    color: #555;
+}
+.tab-slash {
+    font-size: 2rem;
+    color: #000;
+    margin: 0 8px;
 }
