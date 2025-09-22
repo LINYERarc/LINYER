@@ -1,32 +1,17 @@
 .linyer-tab-link {
     font-size: 2rem;
-    font-weight: bold;
     color: #000;
     text-decoration: none;
-    letter-spacing: 2px;
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
 }
 .linyer-tab-link:hover {
-    color: #555;
-}
-.tab-slash {
-    font-size: 2rem;
-    color: #000;
-    margin: 0 8px;
+    color: #000000;
 }
 
 @media (max-width: 600px) {
-    .linyer-tab {
-        padding: 8px 0;
-    }
     .linyer-tab-link {
         font-size: 1rem;
-        letter-spacing: 1px;
         padding: 2px 0;
-    }
-    .tab-slash {
-        font-size: 1rem;
-        margin: 0 2px;
     }
     .div-block-4 {
         max-width: 100vw;
@@ -153,29 +138,22 @@ a:hover {
 }
 .linyer-tab-left {
     justify-content: flex-start;
-    margin-left: 24px;
+    margin-left: 10px;
 }
 .linyer-tab-center {
     justify-content: center;
 }
 .linyer-tab-right {
     justify-content: flex-end;
-    margin-right: 32px;
-    gap: 16px;
+    margin-right: 10px;
 }
 .linyer-tab-link {
     font-size: 2rem;
-    font-weight: bold;
     color: #000;
     text-decoration: none;
     letter-spacing: 2px;
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
 }
 .linyer-tab-link:hover {
-    color: #555;
-}
-.tab-slash {
-    font-size: 2rem;
-    color: #000;
-    margin: 0 8px;
+    color: #000000;
 }
