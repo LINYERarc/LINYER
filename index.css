@@ -1,5 +1,48 @@
+html, body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.img-hover-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+.hover-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: filter 0.3s;
+}
+.img-hover-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: rgba(0,0,0,0.6);
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    text-align: center;
+    pointer-events: none;
+}
+.img-hover-container:hover .hover-img {
+    filter: grayscale(100%);
+}
+.img-hover-container:hover .img-hover-text {
+    opacity: 1;
+    pointer-events: auto;
+}
 .linyer-tab-link {
-    font-size: 2rem;
+    font-size: 1rem;
     color: #000;
     text-decoration: none;
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
@@ -49,11 +92,6 @@ body {
     position: relative;
 }
 
-.page-title {
-    margin-top: 50px; /* Ensure consistent title height */
-    font-size: 16px; /* Set the same font size as the body */
-}
-
 .div-block-4 {
     text-align: center;
     position: relative;
@@ -64,7 +102,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically */
-    height: 100vh; /* Make the div take the full height of the viewport */
+    min-height: 100vh; /* Allow scrolling if content is taller than viewport */
 }
 
 .align-horizontal {
@@ -102,22 +140,6 @@ a:hover {
     text-decoration: underline; /* Add underline on hover */
 }
 
-.title-left {
-    color: rgb(0, 0, 0); /* Set color to blue */
-    flex: 1;
-    font-weight: bold;
-    text-align: right;
-    font-size: 32px; /* Ensure the same font size */
-}
-
-.title-right {
-    color: rgb(0, 0, 0); /* Set color to blue */
-    flex: 1;
-    text-align: left;
-    font-weight: bold;
-    font-size: 32px; /* Ensure the same font size */
-}
-
 .linyer-tab {
     position: fixed;
     top: 0;
@@ -138,20 +160,21 @@ a:hover {
 }
 .linyer-tab-left {
     justify-content: flex-start;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .linyer-tab-center {
     justify-content: center;
+    font: bold 1.1rem 'Avenir', Arial, Helvetica, sans-serif;
+    letter-spacing: 0px
 }
 .linyer-tab-right {
     justify-content: flex-end;
     margin-right: 10px;
 }
 .linyer-tab-link {
-    font-size: 2rem;
+    font-size: 1.1rem;
     color: #000;
     text-decoration: none;
-    letter-spacing: 2px;
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
 }
 .linyer-tab-link:hover {
