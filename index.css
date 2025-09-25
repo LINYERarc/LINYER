@@ -1,3 +1,38 @@
+.contact-content {
+    text-align: left;
+    position: relative;
+    z-index: 1; /* Ensure text is above the image */
+    width: 100%; /* Adjust width as needed */
+    max-width: 800px; /* Optional: set a maximum width */
+    margin: 0 auto; /* Center the div horizontally */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    min-height: 100vh; /* Allow scrolling if content is taller than viewport */
+    margin-top: 15px; /* Add space for the tab */
+}
+.img-columns {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    align-items: flex-start;
+}
+.img-col {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+}
+@media (max-width: 800px) {
+    .img-columns {
+        flex-direction: column;
+        gap: 16px;
+    }
+    .img-col {
+        gap: 16px;
+    }
+}
 html, body {
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* IE and Edge */
@@ -103,6 +138,7 @@ body {
     flex-direction: column;
     justify-content: center; /* Center content vertically */
     min-height: 100vh; /* Allow scrolling if content is taller than viewport */
+    margin-top: 56px; /* Add space for the tab */
 }
 
 .align-horizontal {
@@ -160,7 +196,7 @@ a:hover {
 }
 .linyer-tab-left {
     justify-content: flex-start;
-    margin-left: 5px;
+    margin-left: 10px;
 }
 .linyer-tab-center {
     justify-content: center;

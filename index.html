@@ -7,6 +7,38 @@
     <link rel="stylesheet" href="index.css">
     <style>
     </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Collect all image blocks
+        const imgContainers = Array.from(document.querySelectorAll('.img-hover-container'));
+        if (imgContainers.length === 0) return;
+        // Shuffle the array
+        for (let i = imgContainers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [imgContainers[i], imgContainers[j]] = [imgContainers[j], imgContainers[i]];
+        }
+        // Find the columns container
+        const columns = document.querySelector('.img-columns');
+        if (!columns) return;
+        // Remove all columns
+        columns.innerHTML = '';
+        // Create two columns
+        const col1 = document.createElement('div');
+        col1.className = 'img-col';
+        const col2 = document.createElement('div');
+        col2.className = 'img-col';
+        // Distribute images
+        imgContainers.forEach((container, idx) => {
+            if (idx % 2 === 0) {
+                col1.appendChild(container);
+            } else {
+                col2.appendChild(container);
+            }
+        });
+        columns.appendChild(col1);
+        columns.appendChild(col2);
+    });
+    </script>
 </head>
 <body class="body">
     <div class="linyer-tab">
@@ -23,19 +55,44 @@
     <div class="div-block-4">
         <div class="text-block-6">
             <br/>
-            <div class="img-hover-container">
-                <img src="img/001_Hjelmbacken.JPG" alt="LINYER Image" class="hover-img" />
-                <div class="img-hover-text">Hjelmbacken, A House for Two Brothers</div>
-            </div>
-            <br/>
-            <div class="img-hover-container">
-                <img src="img/004_Building systems.jpeg" alt="LINYER Image" class="hover-img" />
-                <div class="img-hover-text">Buildings Systems, Diploma KTH</div>
-            </div>
-            <br/>
-            <div class="img-hover-container">
-                <img src="img/001_BambooGreenhouse_01.jpeg" alt="LINYER Image" class="hover-img" />
-                <div class="img-hover-text">Bamboo Greenhouse, Chair of Architectural Behaviorology, ETHZ</div>
+            <div class="img-columns">
+                <div class="img-col">
+                    <div class="img-hover-container">
+                        <img src="img/001_Hjelmbacken.JPG" alt="LINYER Image" class="hover-img" />
+                        <div class="img-hover-text">Hjelmbacken<br/>A House for Two Brothers</div>
+                    </div>
+                    <div class="img-hover-container">
+                        <img src="img/001_BambooGreenhouse_01.jpeg" alt="LINYER Image" class="hover-img" />
+                        <div class="img-hover-text">Bamboo Greenhouse<br/>Chair of Architectural Behaviorology ETHZ</div>
+                    <div class="img-hover-container">
+                        <img src="img/004_Building systems.jpeg" alt="LINYER Image" class="hover-img" />
+                        <div class="img-hover-text">Buildings Systems<br/>Diploma KTH</div>
+                    </div>
+                        <div class="img-hover-container">
+                        <img src="img/001_Hjelmbackeninterior.jpeg" alt="LINYER Image" class="hover-img" />
+                        <div class="img-hover-text">Hjelmbacken<br/>A House for Two Brothers</div>
+                    </div>
+                        <div class="img-hover-container">
+                        <img src="img/005_Hochparterre_Zentralperspektive_Richtung_EscherWyss_CMYK_600_RZ.jpeg" alt="LINYER Image" class="hover-img" />
+                        <div class="img-hover-text">Die Säulenhalle: Endlich ein Zentrum für Zürich West!<br/>Hochparterre, Nando von Arb, IGZH, Hamasil Stiftung</div>
+                    </div>
+                        <div class="img-hover-container">
+                        <img src="img/005_schlachthof_site model.jpeg" alt="LINYER Image" class="hover-img" />
+                        <div class="img-hover-text">Eine Stadt ohne Schlachthof?<br/>Diploma ETHZ</div>
+                    </div>
+                        <div class="img-hover-container">
+                        <img src="img/006_Cham_modelfoto.JPG" alt="LINYER Image" class="hover-img" />
+                        <div class="img-hover-text">Musikschule Cham<br/>Dalla Santa Birkeland, Lauro Nächt</div>
+                    </div>
+                        <div class="img-hover-container">
+                        <img src="img/007_Älvsala_sketch.png" alt="LINYER Image" class="hover-img" />
+                        <div class="img-hover-text">Älvsala<br/>Extension of a summer house</div>
+                    </div>
+                        <div class="img-hover-container">
+                        <img src="img/008_Romanshorn.png" alt="LINYER Image" class="hover-img" />
+                        <div class="img-hover-text">Stadthaus Romanshorn<br/>Beatrice Kiser</div>
+                    </div>
+                </div>
             </div>
             <br/>
             <div class="align-horizontal">
