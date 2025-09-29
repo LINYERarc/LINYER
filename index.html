@@ -1,125 +1,84 @@
 <!DOCTYPE html>
-<html data-wf-domain="www.linyer.info" data-wf-page="5ed8947082212ccc732764fc" data-wf-site="5ed61cce8b992c856c0103dd">
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <title>LINYER</title>
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINYER Landing</title>
+    <link rel="preload" href="txt.ttf" as="font" type="font/ttf" crossorigin>
     <style>
-    </style>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Collect all image blocks
-        const imgContainers = Array.from(document.querySelectorAll('.img-hover-container'));
-        if (imgContainers.length === 0) return;
-        // Shuffle the array
-        for (let i = imgContainers.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [imgContainers[i], imgContainers[j]] = [imgContainers[j], imgContainers[i]];
+        @font-face {
+            font-family: 'TXT';
+            src: url('txt.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
         }
-        // Find the columns container
-        const columns = document.querySelector('.img-columns');
-        if (!columns) return;
-        // Remove all columns
-        columns.innerHTML = '';
-        // Create two columns
-        const col1 = document.createElement('div');
-        col1.className = 'img-col';
-        const col2 = document.createElement('div');
-        col2.className = 'img-col';
-        // Distribute images
-        imgContainers.forEach((container, idx) => {
-            if (idx % 2 === 0) {
-                col1.appendChild(container);
-            } else {
-                col2.appendChild(container);
-            }
-        });
-        columns.appendChild(col1);
-        columns.appendChild(col2);
-    });
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .fullbleed-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1;
+        }
+        .overlay {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            color: black;
+            font-size: 10rem;
+            font-family: 'TXT', Arial, Helvetica, sans-serif;
+            text-decoration: none;
+            cursor: pointer;
+            background: none;
+            padding: 0;
+            display: inline-block;
+        }
+        .overlay:hover {
+            color: red;
+            text-decoration: none;
+        }
+    </style>
+<body>
+    <img id="bgImage" class="fullbleed-bg" src="img/INDEX_01.jpg" alt=" " />
+    <a id="overlayLink" href="work.html" class="overlay">LINYER</a>
+    <script>
+        const images = [
+            "img/INDEX_01.jpg",
+            "img/INDEX_02.jpg",
+            "img/INDEX_03.jpg",
+            "img/INDEX_04.jpg",
+            "img/INDEX_05.jpg",
+            "img/INDEX_06.jpg",
+            "img/INDEX_07.jpg",
+            "img/INDEX_08.jpg",
+            "img/INDEX_09.jpg",
+            "img/INDEX_10.jpg",
+            "img/INDEX_11.jpg",
+            "img/INDEX_12.jpg",
+            "img/INDEX_13.jpg",
+            "img/INDEX_14.jpg",
+        ];
+        const bgImage = document.getElementById('bgImage');
+        const randomIdx = Math.floor(Math.random() * images.length);
+        bgImage.src = images[randomIdx];
+
+        // Randomly set overlay link to de or sv version
+        const overlayLink = document.getElementById('overlayLink');
+        const langPages = ["work_de.html", "work_sv.html"];
+        overlayLink.href = langPages[Math.floor(Math.random() * langPages.length)];
     </script>
-</head>
-<body class="body">
-    <div class="linyer-tab">
-        <div class="linyer-tab-section linyer-tab-left">
-            <a href="contact.html" class="linyer-tab-link">Info</a>
-        </div>
-        <div class="linyer-tab-section linyer-tab-center">
-            <a href="index.html" class="linyer-tab-link">LINYER</a>
-        </div>
-        <div class="linyer-tab-section linyer-tab-right">
-            <a href="https://www.instagram.com/a_linyer/" target="_blank" class="linyer-tab-link">Work</a>
-        </div>
-    </div>
-    <div class="div-block-4">
-        <div class="text-block-6">
-            <br/>
-            <div class="img-columns">
-                <div class="img-col">
-                    <div class="img-hover-container">
-                        <img src="img/001_Hjelmbacken.JPG" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Hjelmbacken<br/>A House for Two Brothers</div>
-                    </div>
-                    <div class="img-hover-container">
-                        <img src="img/001_BambooGreenhouse_01.jpeg" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Bamboo Greenhouse<br/>Chair of Architectural Behaviorology ETHZ</div>
-                    <div class="img-hover-container">
-                        <img src="img/004_Building systems.jpeg" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Buildings Systems<br/>Diploma KTH</div>
-                    </div>
-                        <div class="img-hover-container">
-                        <img src="img/001_Hjelmbackeninterior.jpeg" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Hjelmbacken<br/>A House for Two Brothers</div>
-                    </div>
-                        <div class="img-hover-container">
-                        <img src="img/005_Hochparterre_Zentralperspektive_Richtung_EscherWyss_CMYK_600_RZ.jpeg" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Die Säulenhalle: Endlich ein Zentrum für Zürich West!<br/>Hochparterre, Nando von Arb, IGZH, Hamasil Stiftung</div>
-                    </div>
-                        <div class="img-hover-container">
-                        <img src="img/005_schlachthof_site model.jpeg" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Eine Stadt ohne Schlachthof?<br/>Diploma ETHZ</div>
-                    </div>
-                        <div class="img-hover-container">
-                        <img src="img/006_Cham_modelfoto.JPG" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Musikschule Cham<br/>Dalla Santa Birkeland, Lauro Nächt</div>
-                    </div>
-                        <div class="img-hover-container">
-                        <img src="img/007_Älvsala_sketch.png" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Älvsala<br/>Extension of a summer house</div>
-                    </div>
-                        <div class="img-hover-container">
-                        <img src="img/008_Romanshorn.png" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Stadthaus Romanshorn<br/>Beatrice Kiser</div>
-                    </div>
-                        <div class="img-hover-container">
-                        <img src="img/006_Cham_Section perspective.jpeg" alt="LINYER Image" class="hover-img" />
-                        <div class="img-hover-text">Musikschule Cham<br/>Dalla Santa Birkeland, Lauro Nächt</div>
-                    </div>
-                </div>
-            </div>
-            <br/>
-            <div class="align-horizontal">
-                <div class="text-left">Architekturbüro</div>
-                <div class="slash">|</div>
-                <div class="text-right">Arkitektkontor</div>
-            </div>
-            <div class="align-horizontal">
-                <div class="text-left">Zürich</div>
-                <div class="slash">|</div>
-                <div class="text-right">Stockholm</div>
-            </div>
-             <div class="align-horizontal">
-                <div class="text-left">Lowis Gujer</div>
-                <div class="slash">|</div>
-                <div class="text-right">Emma Lindén</div>
-            </div>
-            <div class="align-horizontal">
-                <div class="text-left">MSc. Arch. ETH</div>
-                <div class="slash">|</div>
-                <div class="text-right">Arkitekt SAR/MSA</div>
-            </div>
-        </div>
-    </div>
 </body>
 </html>

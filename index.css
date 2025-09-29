@@ -1,3 +1,15 @@
+@font-face {
+    font-family: 'TXT';
+    src: url('txt.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Avenir';
+    src: url('Avenir.ttc') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 .contact-content {
     text-align: left;
     position: relative;
@@ -13,7 +25,7 @@
 }
 .img-columns {
     display: flex;
-    gap: 24px;
+    gap: 160px;
     justify-content: center;
     align-items: flex-start;
 }
@@ -21,7 +33,7 @@
     flex: 1 1 0;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 160px;
     min-width: 0;
 }
 @media (max-width: 800px) {
@@ -50,27 +62,24 @@ body::-webkit-scrollbar {
     display: block;
     width: 100%;
     height: auto;
-    transition: filter 0.3s;
+    transition: filter 0s;
 }
 .img-hover-text {
     position: absolute;
-    top: 0;
     left: 0;
+    bottom: 0;
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    background: rgba(0,0,0,0.6);
+    align-items: flex-end;
+    justify-content: flex-start;
+    color: #000000;
+    background: rgb(255, 255, 255);
     font-size: 1rem;
     opacity: 0;
-    transition: opacity 0.3s;
-    text-align: center;
+    transition: opacity 0s;
+    text-align: left;
     pointer-events: none;
-}
-.img-hover-container:hover .hover-img {
-    filter: grayscale(100%);
 }
 .img-hover-container:hover .img-hover-text {
     opacity: 1;
@@ -80,12 +89,76 @@ body::-webkit-scrollbar {
     font-size: 1rem;
     color: #000;
     text-decoration: none;
+    font-family: 'TXT', Arial, Helvetica, sans-serif;
+}
+body {
+    background-color: #fff;
+    color: rgb(0, 0, 0);
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
+    font-size: 16px; /* Set a consistent font size */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items to the top */
+    min-height: 100vh; /* Minimum height to allow scrolling */
+    text-align: center;
+    overflow-y: auto; /* Enable vertical scrolling */
+    position: relative;
+    padding: 80px 80px 80px 80px;
 }
-.linyer-tab-link:hover {
-    color: #000000;
+a {
+    text-decoration: none; /* Remove underline */
+    color: rgb(0, 0, 0); /* Set color to white */
 }
-
+a:hover {
+    text-decoration: none;
+    color: red;
+}
+.linyer-tab {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    padding: 10px 0px 10px 0px;
+    z-index: 1000;
+    box-shadow: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.linyer-tab-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-family: 'TXT', Arial, Helvetica, sans-serif;
+}
+.linyer-tab-left {
+    font: 1.1rem;
+    margin-left: 80px;
+    text-align: left;
+}
+.linyer-tab-center {
+    justify-content: center;
+    letter-spacing: 2px;
+}
+.linyer-tab-center .linyer-tab-link {
+     font-size: 4rem !important;
+     font-family: 'TXT', Arial, Helvetica, sans-serif !important;
+}
+.linyer-tab-right {
+    font: 1.1rem;
+    margin-right: 80px;
+    text-align: right;
+}
+.linyer-tab-link {
+    color: #000;
+    text-decoration: none;
+}
+.active-lang {
+    text-decoration: underline !important;
+}
 @media (max-width: 600px) {
     .linyer-tab-link {
         font-size: 1rem;
@@ -103,116 +176,4 @@ body::-webkit-scrollbar {
     .text-left, .text-right {
         font-size: 0.9rem;
     }
-}
-@font-face {
-    font-family: 'Avenir';
-    src: url('/Users/lgujer/Desktop/015_Website_LINYER/001_VScode/Avenir.ttc') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-body {
-    background-color: #fff;
-    color: rgb(0, 0, 0);
-    font-family: 'Avenir', Arial, Helvetica, sans-serif;
-    font-size: 16px; /* Set a consistent font size */
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Align items to the top */
-    min-height: 100vh; /* Minimum height to allow scrolling */
-    text-align: center;
-    overflow-y: auto; /* Enable vertical scrolling */
-    position: relative;
-}
-
-.div-block-4 {
-    text-align: center;
-    position: relative;
-    z-index: 1; /* Ensure text is above the image */
-    width: 100%; /* Adjust width as needed */
-    max-width: 1200px; /* Optional: set a maximum width */
-    margin: 0 auto; /* Center the div horizontally */
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    min-height: 100vh; /* Allow scrolling if content is taller than viewport */
-    margin-top: 56px; /* Add space for the tab */
-}
-
-.align-horizontal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%; /* Ensure the align-horizontal div takes full width */
-}
-
-.text-left, .text-right {
-    flex: 1;
-    text-align: right;
-    font-size: 16px; /* Ensure the same font size */
-}
-
-.text-right {
-    text-align: left;
-}
-
-.slash {
-    margin: 0 5px; /* Adjust spacing around the slash */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 5px; /* Fixed width for the slash to center it */
-    font-size: 16px; /* Ensure the same font size */
-}
-
-a {
-    text-decoration: none; /* Remove underline */
-    color: rgb(0, 0, 0); /* Set color to white */
-}
-
-a:hover {
-    text-decoration: underline; /* Add underline on hover */
-}
-
-.linyer-tab {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    background: #fff;
-    padding: 12px 0 12px 0;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.linyer-tab-section {
-    flex: 1;
-    display: flex;
-    align-items: center;
-}
-.linyer-tab-left {
-    justify-content: flex-start;
-    margin-left: 10px;
-}
-.linyer-tab-center {
-    justify-content: center;
-    font: bold 1.1rem 'Avenir', Arial, Helvetica, sans-serif;
-    letter-spacing: 0px
-}
-.linyer-tab-right {
-    justify-content: flex-end;
-    margin-right: 10px;
-}
-.linyer-tab-link {
-    font-size: 1.1rem;
-    color: #000;
-    text-decoration: none;
-    font-family: 'Avenir', Arial, Helvetica, sans-serif;
-}
-.linyer-tab-link:hover {
-    color: #000000;
 }

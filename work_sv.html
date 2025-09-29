@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="utf-8"/>
+    <title>LINYER – Arbete (Svenska)</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link rel="stylesheet" href="index.css">
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Collect all image blocks
+        const imgContainers = Array.from(document.querySelectorAll('.img-hover-container'));
+        if (imgContainers.length === 0) return;
+        // Shuffle the array
+        for (let i = imgContainers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [imgContainers[i], imgContainers[j]] = [imgContainers[j], imgContainers[i]];
+        }
+        // Find the columns container
+        const columns = document.querySelector('.img-columns');
+        if (!columns) return;
+        // Remove all columns
+        columns.innerHTML = '';
+        // Create three columns
+        const col1 = document.createElement('div');
+        col1.className = 'img-col';
+        const col2 = document.createElement('div');
+        col2.className = 'img-col';
+        const col3 = document.createElement('div');
+        col3.className = 'img-col';
+        // Distribute images
+        imgContainers.forEach((container, idx) => {
+            if (idx % 3 === 0) {
+                col1.appendChild(container);
+            } else if (idx % 3 === 1) {
+                col2.appendChild(container);
+            } else {
+                col3.appendChild(container);
+            }
+        });
+        columns.appendChild(col1);
+        columns.appendChild(col2);
+        columns.appendChild(col3);
+    });
+    </script>
+</head>
+<body class="index-page">
+    <div class="linyer-tab">
+        <div class="linyer-tab-section linyer-tab-left">
+            <a href="contact_sv.html" class="linyer-tab-link">INFO</a>
+            <div>
+                <a href="work_de.html" class="linyer-tab-link">de.</a>
+                <a href="work_sv.html" class="linyer-tab-link active-lang">sv.</a>
+            </div>
+        </div>
+        <div class="linyer-tab-section linyer-tab-center">
+            <a href="work_sv.html" class="linyer-tab-link">LINYER</a>
+        </div>
+        <div class="linyer-tab-section linyer-tab-right">
+            <a href="https://www.instagram.com/a_linyer/" target="_blank" class="linyer-tab-link">INSTAGRAM</a>
+            <div>contact@linyer.info</div>
+        </div>
+    </div>
+    <div class="img-columns">
+        <div class="img-col">
+            <div class="img-hover-container">
+                <img src="img/INDEX_01.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">JAPANSTUDIO 2: OMSORGSNAV<br/>Masterstudio vid ETHZ med Chie Konno, Wataru Doi, Yukari Iwata, Erik Fichter</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_02.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">FOKUSARBETE: KLIMATKÖK<br/>Kurs vid ETHZ med Prof. Momoyo Kaijima<br/>Foto: Yuri Schmid</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_03.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">FOKUSARBETE: KLIMATKÖK<br/>Kurs vid ETHZ med Prof. Momoyo Kaijima<br/>Foto: Yuri Schmid</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_04.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">ETT HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_05.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">ETT HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_06.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">FRONT BACK<br/>Zürich, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_07.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">FRONT BACK<br/>Zürich, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_08.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">FRONT BACK<br/>Zürich, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_09.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">EN STAD UTAN SLAKTHUS?<br/>Zürich, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_10.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">EN STAD UTAN SLAKTHUS?<br/>Zürich, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_11.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">ÅTERANVÄNDNING AV SNÄCKAN 8<br/>Stockholm, Sverige</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_12.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">DIE SÄULENHALLE: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_13.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">DIE SÄULENHALLE: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_14.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">DIE SÄULENHALLE: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
