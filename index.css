@@ -235,6 +235,7 @@ a:hover {
     }
     .fullscreen-text {
         padding: 6px 6px 6px 6px;
+        font-size: 1rem;
     }
     .img-columns {
         flex-direction: column;
