@@ -198,6 +198,7 @@ a:hover {
 .linyer-tab-center .linyer-tab-link {
      font-size: 2.2rem !important;
      font-family: 'TXT', Arial, Helvetica, sans-serif !important;
+     color: red !important;
 }
 .linyer-tab-right {
     font: 1.1rem;
