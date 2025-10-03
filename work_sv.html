@@ -1,33 +1,69 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
+    <style>
+    .fullscreen-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #fff;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        animation: fadeIn 0s;
+    }
+    .fullscreen-img {
+        width: 100vw;
+        height: 100vh;
+        object-fit: contain;
+        margin: 0;
+        display: block;
+        background: transparent;
+    }
+    .fullscreen-text {
+        width: 100vw;
+        color: #000;
+        background: #fff;
+        font-size: 1rem;
+        font-family: 'Avenir', Arial, Helvetica, sans-serif;
+        padding: 10px 10px 10px 80px;
+        box-sizing: border-box;
+        text-align: left;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        z-index: 10000;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    </style>
     <meta charset="utf-8"/>
-    <title>LINYER – Arbete (Svenska)</title>
+    <title>LINYER PROJEKT sv.</title>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link rel="stylesheet" href="index.css">
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Collect all image blocks
+        // Shuffle and distribute images as before
         const imgContainers = Array.from(document.querySelectorAll('.img-hover-container'));
         if (imgContainers.length === 0) return;
-        // Shuffle the array
         for (let i = imgContainers.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [imgContainers[i], imgContainers[j]] = [imgContainers[j], imgContainers[i]];
         }
-        // Find the columns container
         const columns = document.querySelector('.img-columns');
         if (!columns) return;
-        // Remove all columns
         columns.innerHTML = '';
-        // Create three columns
         const col1 = document.createElement('div');
         col1.className = 'img-col';
         const col2 = document.createElement('div');
         col2.className = 'img-col';
         const col3 = document.createElement('div');
         col3.className = 'img-col';
-        // Distribute images
         imgContainers.forEach((container, idx) => {
             if (idx % 3 === 0) {
                 col1.appendChild(container);
@@ -40,13 +76,39 @@
         columns.appendChild(col1);
         columns.appendChild(col2);
         columns.appendChild(col3);
+
+        // Fullscreen feature
+        imgContainers.forEach(container => {
+            container.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const img = container.querySelector('img');
+                const text = container.querySelector('.img-hover-text');
+                const overlay = document.createElement('div');
+                overlay.className = 'fullscreen-overlay';
+                // Image
+                const fullscreenImg = document.createElement('img');
+                fullscreenImg.className = 'fullscreen-img';
+                fullscreenImg.src = img.src;
+                fullscreenImg.alt = img.alt;
+                // Text
+                const fullscreenText = document.createElement('div');
+                fullscreenText.className = 'fullscreen-text';
+                fullscreenText.innerHTML = text.innerHTML;
+                overlay.appendChild(fullscreenImg);
+                overlay.appendChild(fullscreenText);
+                overlay.onclick = function(e) {
+                    document.body.removeChild(overlay);
+                };
+                document.body.appendChild(overlay);
+            });
+        });
     });
     </script>
 </head>
 <body class="index-page">
     <div class="linyer-tab">
         <div class="linyer-tab-section linyer-tab-left">
-            <a href="contact_sv.html" class="linyer-tab-link">INFO</a>
+            <a href="work_sv.html" class="linyer-tab-link active-lang">PROJEKT</a>
             <div>
                 <a href="work_de.html" class="linyer-tab-link">de.</a>
                 <a href="work_sv.html" class="linyer-tab-link active-lang">sv.</a>
@@ -56,7 +118,7 @@
             <a href="index.html" class="linyer-tab-link">LINYER</a>
         </div>
         <div class="linyer-tab-section linyer-tab-right">
-            <a href="https://www.instagram.com/a_linyer/" target="_blank" class="linyer-tab-link">INSTAGRAM</a>
+            <a href="contact_sv.html" target="_blank" class="linyer-tab-link">INFO</a>
             <div>contact@linyer.info</div>
         </div>
     </div>
@@ -75,112 +137,112 @@
                 <div class="img-hover-text">FOKUSARBETE: KLIMATKÖK<br/>Kurs vid ETHZ med Prof. Momoyo Kaijima och åtta studenter<br/>Foto: Yuri Schmid</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_04.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_04.jpeg" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">FOKUSARBETE: BAMBU VÄXTHUS<br/>Kurs vid ETHZ med Prof. Momoyo Kaijima och tio studenter</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_05.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_05.jpeg" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">FOKUSARBETE: BAMBU VÄXTHUS<br/>Kurs vid ETHZ med Prof. Momoyo Kaijima och tio studenter</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_06.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">FOKUSARBETE: BAMBU VÄXTHUS<br/>Kurs vid ETHZ med Prof. Momoyo Kaijima och tio studenter</div>
-            </div>
-            <div class="img-hover-container">
-                <img src="img/INDEX_07.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">FOKUSARBETE: BAMBU VÄXTHUS<br/>Kurs vid ETHZ med Prof. Momoyo Kaijima och tio studenter</div>
-            </div>
-            <div class="img-hover-container">
-                <img src="img/INDEX_08.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_10.jpeg" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_09.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_11.jpeg" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_10.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_12.jpeg" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_11.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_13.jpeg" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_12.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">FROM THE FRONT FROM BEHIND<br/>Denkraum #3, Consistency, ETHZ</div>
+                <img src="img/INDEX_20.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_13.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">FROM THE FRONT FROM BEHIND<br/>Denkraum #3, Consistency, ETHZ</div>
+                <img src="img/INDEX_21.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_14.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">FROM THE FRONT FROM BEHIND<br/>Denkraum #3, Consistency, ETHZ<br/>Zürich, Schweiz</div>
+                <img src="img/INDEX_22.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_15.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">FROM THE FRONT FROM BEHIND<br/>Denkraum #3, Consistency, ETHZ<br/>Zürich, Schweiz</div>
+                <img src="img/INDEX_23.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_16.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_30.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">MUSIKSKOLAN "DER HOLLÄNDER"<br/>med Dalla Santa Birkeland Arkitektur<br/>Cham, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_31.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">MUSIKSKOLAN "DER HOLLÄNDER"<br/>med Dalla Santa Birkeland Arkitektur<br/>Cham, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_32.jpeg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">MUSIKSKOLAN "DER HOLLÄNDER"<br/>med Dalla Santa Birkeland Arkitektur<br/>Cham, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_33.png" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">MUSIKSKOLAN "DER HOLLÄNDER"<br/>med Dalla Santa Birkeland Arkitektur<br/>Cham, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_34.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">MUSIKSKOLAN "DER HOLLÄNDER"<br/>med Dalla Santa Birkeland Arkitektur<br/>Cham, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_35.jpg" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">MUSIKSKOLAN "DER HOLLÄNDER"<br/>med Dalla Santa Birkeland Arkitektur<br/>Cham, Schweiz</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_40.gif" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">EN STAD UTAN SLAKTHUS?<br/>Diplom med Prof. Momoyo Kaijima, ETHZ</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_17.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_41.gif" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">EN STAD UTAN SLAKTHUS?<br/>Diplom med Prof. Momoyo Kaijima, ETHZ</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_18.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_42.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">EN STAD UTAN SLAKTHUS?<br/>Diplom med Prof. Momoyo Kaijima, ETHZ</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_50.gif" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">ÅTERANVÄNDNING AV SNÄCKAN 8<br/>KTH, Stockholm, Sverige</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_19.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_51.jpeg" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">ÅTERANVÄNDNING AV SNÄCKAN 8<br/>KTH, Stockholm, Sverige</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_20.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
+                <img src="img/INDEX_60.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">FROM THE FRONT FROM BEHIND<br/>Denkraum #3, Consistency, ETHZ<br/>Zürich, Schweiz</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_21.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb</div>
+                <img src="img/INDEX_61.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">FROM THE FRONT FROM BEHIND<br/>Denkraum #3, Consistency, ETHZ<br/>Zürich, Schweiz</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_22.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
+                <img src="img/INDEX_62.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">FROM THE FRONT FROM BEHIND<br/>Denkraum #3, Consistency, ETHZ<br/>Zürich, Schweiz</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_23.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</div>
+                <img src="img/INDEX_63.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">FROM THE FRONT FROM BEHIND<br/>Denkraum #3, Consistency, ETHZ<br/>Zürich, Schweiz</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_24.jpg" alt="LINYER Bild" class="hover-img" />
+                <img src="img/INDEX_70.jpg" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">KERAMIKPAVILJONG<br/>Stockholm, Sverige</div>
             </div>
             <div class="img-hover-container">
-                <img src="img/INDEX_25.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">MUSIKSKOLAN "DER HOLLÄNDER"<br/>Cham, Schweiz</div>
-            </div>
-            <div class="img-hover-container">
-                <img src="img/INDEX_26.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">BYGGNADSSYSTEM<br/>Diplom KTH</div>
-            </div>
-            <div class="img-hover-container">
-                <img src="img/INDEX_27.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">BYGGNADSSYSTEM<br/>Diplom KTH</div>
-            </div>
-            <div class="img-hover-container">
-                <img src="img/INDEX_28.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">BYGGNADSSYSTEM<br/>Diplom KTH</div>
-            </div>
-            <div class="img-hover-container">
-                <img src="img/INDEX_29.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">MUSIKSKOLAN "DER HOLLÄNDER"<br/>Cham, Schweiz</div>
-            </div>
-            <div class="img-hover-container">
-                <img src="img/INDEX_30.jpg" alt="LINYER Bild" class="hover-img" />
-                <div class="img-hover-text">MUSIKSKOLAN "DER HOLLÄNDER"<br/>Cham, Schweiz</div>
+                <img src="img/INDEX_71.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">KERAMIKPAVILJONG<br/>Stockholm, Sverige</div>
             </div>
         </div>
     </div>
