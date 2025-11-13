@@ -1,105 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINYER Architecture</title>
-    <link rel="preload" href="txt.ttf" as="font" type="font/ttf" crossorigin>
-    <style>
-        @font-face {
-            font-family: 'TXT';
-            src: url('txt.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
-        }
-        .fullbleed-bg {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: 1;
-        }
-        .overlay {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            color: white;
-            font-size: 10rem;
-            font-family: 'TXT', Arial, Helvetica, sans-serif;
-            text-decoration: none;
-            cursor: pointer;
-            background: none;
-            padding: 0;
-            display: inline-block;
-            mix-blend-mode: difference;
-        }
-        .overlay:hover {
-            color: red;
-            text-decoration: none;
-        }
-        @media (max-width: 600px) {
-            .overlay {
-                font-size: 2rem;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LINYER — Redirect</title>
+  <script>
+    // Immediately redirect to either the German or Swedish work page at random
+    (function(){
+      const pages = ['work_de.html','work_sv.html'];
+      const target = pages[Math.floor(Math.random()*pages.length)];
+      // Use location.replace so the landing page isn't kept in history
+      location.replace(target);
+    })();
+  </script>
+</head>
 <body>
-    <img id="bgImage" class="fullbleed-bg" src="img/INDEX_01.jpg" alt=" " />
-    <a id="overlayLink" href="work.html" class="overlay">LINYER</a>
-    <script>
-        const images = [
-            "img/INDEX_01.jpg",
-            "img/INDEX_02.jpg",
-            "img/INDEX_03.jpg",
-            "img/INDEX_04.jpeg",
-            "img/INDEX_05.jpeg",
-            "img/INDEX_10.jpeg",
-            "img/INDEX_11.jpeg",
-            "img/INDEX_12.jpeg",
-            "img/INDEX_13.jpeg",
-            "img/INDEX_20.gif",
-            "img/INDEX_21.gif",
-            "img/INDEX_22.gif",
-            "img/INDEX_23.gif",
-            "img/INDEX_30.gif",
-            "img/INDEX_31.gif",
-            "img/INDEX_32.jpeg",
-            "img/INDEX_33.jpg",
-            "img/INDEX_34.jpg",
-            "img/INDEX_40.gif",
-            "img/INDEX_41.gif",
-            "img/INDEX_42.gif",
-            "img/INDEX_50.gif",
-            "img/INDEX_51.jpeg",
-            "img/INDEX_60.gif",
-            "img/INDEX_61.gif",
-            "img/INDEX_62.gif",
-            "img/INDEX_63.gif",
-            "img/INDEX_70.jpg",
-            "img/INDEX_71.gif"
-        ];
-        const bgImage = document.getElementById('bgImage');
-        const randomIdx = Math.floor(Math.random() * images.length);
-        bgImage.src = images[randomIdx];
-
-        // Randomly set overlay link to de or sv version
-        const overlayLink = document.getElementById('overlayLink');
-        const langPages = ["work_de.html", "work_sv.html"];
-        overlayLink.href = langPages[Math.floor(Math.random() * langPages.length)];
-    </script>
+  Redirecting...
 </body>
 </html>
