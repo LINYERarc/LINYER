@@ -23,6 +23,12 @@
     min-height: 100vh; /* Allow scrolling if content is taller than viewport */
     margin-top: 15px; /* Add space for the tab */
 }
+/* Titles inside the contact content use the TXT font */
+.contact-content > span {
+    font-family: 'TXT', Arial, Helvetica, sans-serif;   
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
 .img-columns {
     display: flex;
     flex-wrap: nowrap;
