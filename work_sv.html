@@ -12,19 +12,23 @@
         // Shuffle and distribute images as before
         const imgContainers = Array.from(document.querySelectorAll('.img-hover-container'));
         if (imgContainers.length === 0) return;
+        
         for (let i = imgContainers.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [imgContainers[i], imgContainers[j]] = [imgContainers[j], imgContainers[i]];
         }
+        
         const columns = document.querySelector('.img-columns');
         if (!columns) return;
         columns.innerHTML = '';
+        
         const col1 = document.createElement('div');
         col1.className = 'img-col';
         const col2 = document.createElement('div');
         col2.className = 'img-col';
         const col3 = document.createElement('div');
         col3.className = 'img-col';
+        
         imgContainers.forEach((container, idx) => {
             if (idx % 3 === 0) {
                 col1.appendChild(container);
@@ -34,32 +38,100 @@
                 col3.appendChild(container);
             }
         });
+        
         columns.appendChild(col1);
         columns.appendChild(col2);
         columns.appendChild(col3);
 
-        // Fullscreen feature
+        // Helper function to extract the first number from filename
+        function getFilePrefix(filename) {
+            const match = filename.match(/INDEX_(\d)/i);
+            return match ? match[1] : null;
+        }
+
+        // Get all images grouped by prefix
+        const imagesByPrefix = {};
+        imgContainers.forEach(container => {
+            const img = container.querySelector('img');
+            const src = img.src;
+            const filename = src.split('/').pop();
+            const prefix = getFilePrefix(filename);
+            
+            if (prefix) {
+                if (!imagesByPrefix[prefix]) {
+                    imagesByPrefix[prefix] = [];
+                }
+                imagesByPrefix[prefix].push({
+                    container: container,
+                    img: img,
+                    text: container.querySelector('.img-hover-text'),
+                    filename: filename
+                });
+            }
+        });
+
+        // Fullscreen feature with image navigation
         imgContainers.forEach(container => {
             container.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const img = container.querySelector('img');
                 const text = container.querySelector('.img-hover-text');
+                const filename = img.src.split('/').pop();
+                const prefix = getFilePrefix(filename);
+                
+                // Get all images with the same prefix
+                const relatedImages = imagesByPrefix[prefix] || [];
+                let currentIndex = relatedImages.findIndex(item => item.filename === filename);
+                
                 const overlay = document.createElement('div');
                 overlay.className = 'fullscreen-overlay';
+                
                 // Image
                 const fullscreenImg = document.createElement('img');
                 fullscreenImg.className = 'fullscreen-img';
                 fullscreenImg.src = img.src;
                 fullscreenImg.alt = img.alt;
+                
                 // Text
                 const fullscreenText = document.createElement('div');
                 fullscreenText.className = 'fullscreen-text';
                 fullscreenText.innerHTML = text.innerHTML;
+                
                 overlay.appendChild(fullscreenImg);
                 overlay.appendChild(fullscreenText);
-                overlay.onclick = function(e) {
-                    document.body.removeChild(overlay);
+                
+                // Click to navigate to next image in the same group
+                overlay.addEventListener('click', function(e) {
+                    if (relatedImages.length > 1) {
+                        currentIndex = (currentIndex + 1) % relatedImages.length;
+                        const nextImage = relatedImages[currentIndex];
+                        fullscreenImg.src = nextImage.img.src;
+                        fullscreenText.innerHTML = nextImage.text.innerHTML;
+                    } else {
+                        document.body.removeChild(overlay);
+                    }
+                });
+                
+                // Close on ESC key
+                const closeHandler = function(e) {
+                    if (e.key === 'Escape') {
+                        document.body.removeChild(overlay);
+                        document.removeEventListener('keydown', closeHandler);
+                    }
                 };
+                document.addEventListener('keydown', closeHandler);
+                
+                // Create close button (X)
+                const closeBtn = document.createElement('div');
+                closeBtn.className = 'fullscreen-close-btn';
+                closeBtn.innerHTML = 'X';
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    document.body.removeChild(overlay);
+                    document.removeEventListener('keydown', closeHandler);
+                });
+                overlay.appendChild(closeBtn);
+                
                 document.body.appendChild(overlay);
             });
         });
@@ -120,6 +192,26 @@
             <div class="img-hover-container">
                 <img src="img/INDEX_13.jpeg" alt="LINYER Bild" class="hover-img" />
                 <div class="img-hover-text">HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
+                        </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_15.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_16.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_17.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_18.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
+            </div>
+            <div class="img-hover-container">
+                <img src="img/INDEX_19.gif" alt="LINYER Bild" class="hover-img" />
+                <div class="img-hover-text">HAUS FÜR ZWEI BRÜDER<br/>Hjelmbacken, Schweden</div>HUS FÖR TVÅ BRÖDER<br/>Hjelmbacken, Sverige</div>
             </div>
             <div class="img-hover-container">
                 <img src="img/INDEX_20.png" alt="LINYER Bild" class="hover-img" />

@@ -23,10 +23,9 @@
     min-height: 100vh; /* Allow scrolling if content is taller than viewport */
     margin-top: 15px; /* Add space for the tab */
 }
-/* Titles inside the contact content use the TXT font */
 .contact-content > span {
     font-family: 'TXT', Arial, Helvetica, sans-serif;   
-    font-size: 1.5rem;
+    font-size: 1rem;
     text-transform: uppercase;
 }
 .img-columns {
@@ -139,6 +138,36 @@ body::-webkit-scrollbar {
         cursor: pointer;
         z-index: 10001;
     }
+    .fullscreen-close-btn {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    color: #000;
+    font-size: 2rem;
+    font-family: 'TXT', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    z-index: 10001;
+    user-select: none;
+    line-height: 1;
+}
+.fullscreen-close-btn:hover {
+    color: red;
+}
+.fullscreen-counter {
+    position: absolute;
+    bottom: 24px;
+    right: 32px;
+    color: #000;
+    font-size: 1.5rem;
+    font-family: 'TXT', Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 10001;
+    user-select: none;
+    line-height: 1;
+}
 @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
