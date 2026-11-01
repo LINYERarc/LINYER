@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="de" id="html-root">
+<head>
+    <meta charset="utf-8"/>
+    <title id="page-title">LINYER Architektur</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link rel="stylesheet" href="index.css">
+    <script>
+        function switchLang(lang) {
+            const root = document.getElementById('html-root');
+            root.setAttribute('lang', lang);
+            
+            document.querySelectorAll('.lang-de').forEach(el => el.style.display = (lang === 'de') ? 'inline-block' : 'none');
+            document.querySelectorAll('.lang-de-block').forEach(el => el.style.display = (lang === 'de') ? 'block' : 'none');
+            document.querySelectorAll('.lang-sv').forEach(el => el.style.display = (lang === 'sv') ? 'inline-block' : 'none');
+            document.querySelectorAll('.lang-sv-block').forEach(el => el.style.display = (lang === 'sv') ? 'block' : 'none');
+            
+            document.querySelectorAll('.lang-btn-de').forEach(el => el.classList.toggle('active-lang', lang === 'de'));
+            document.querySelectorAll('.lang-btn-sv').forEach(el => el.classList.toggle('active-lang', lang === 'sv'));
+            
+            document.getElementById('page-title').textContent = (lang === 'de') ? 'LINYER Architektur' : 'LINYER Arkitektur';
+            localStorage.setItem('linyer_lang', lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('linyer_lang') || 'de';
+            switchLang(savedLang);
+
+            const imgContainers = Array.from(document.querySelectorAll('.img-hover-container'));
+            if (imgContainers.length === 0) return;
+            
+            imgContainers.forEach(container => {
+                if (!container.querySelector('.img-plus-sign')) {
+                    const plusSign = document.createElement('div');
+                    plusSign.className = 'img-plus-sign';
+                    plusSign.innerHTML = '+';
+                    container.appendChild(plusSign);
+                }
+            });
+
+            const columns = document.querySelector('.img-columns');
+            if (!columns) return;
+            columns.innerHTML = '';
+            
+            // Auf Desktop (breiter als 800px): Mischen und auf 3 Spalten aufteilen
+            // Auf Mobilgeräten (<= 800px): Spalten auflösen und alle Bilder in einer einzigen Spalte untereinander anzeigen
+            if (window.innerWidth > 800) {
+                for (let i = imgContainers.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [imgContainers[i], imgContainers[j]] = [imgContainers[j], imgContainers[i]];
+                }
+                
+                const col1 = document.createElement('div'); col1.className = 'img-col';
+                const col2 = document.createElement('div'); col2.className = 'img-col';
+                const col3 = document.createElement('div'); col3.className = 'img-col';
+                
+                imgContainers.forEach((container, idx) => {
+                    if (idx % 3 === 0) col1.appendChild(container);
+                    else if (idx % 3 === 1) col2.appendChild(container);
+                    else col3.appendChild(container);
+                });
+                
+                columns.appendChild(col1);
+                columns.appendChild(col2);
+                columns.appendChild(col3);
+            } else {
+                imgContainers.forEach(container => {
+                    columns.appendChild(container);
+                });
+            }
+
+            function getFileGroup(filename) {
+                const match = filename.match(/INDEX_(\d+)/i);
+                if (!match) return null;
+                const numStr = match[1];
+                if (filename.includes('2602')) return '2602';
+                if (filename.includes('2406')) return '2406';
+                if (filename.includes('2605')) return '2605';
+                const num = parseInt(numStr, 10);
+                if (num >= 10 && num <= 19) return '10_series';
+                return numStr;
+            }
+
+            const imagesByGroup = {};
+            imgContainers.forEach(container => {
+                const img = container.querySelector('img');
+                const src = img.src;
+                const filename = src.split('/').pop();
+                const group = getFileGroup(filename);
+                if (group) {
+                    if (!imagesByGroup[group]) imagesByGroup[group] = [];
+                    imagesByGroup[group].push({
+                        container: container,
+                        img: img,
+                        text: container.querySelector('.img-hover-text'),
+                        filename: filename
+                    });
+                }
+            });
+
+            imgContainers.forEach(container => {
+                container.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const img = container.querySelector('img');
+                    const text = container.querySelector('.img-hover-text');
+                    const filename = img.src.split('/').pop();
+                    const group = getFileGroup(filename);
+                    
+                    let relatedImages = imagesByGroup[group] || [{ img: img, text: text, filename: filename }];
+                    relatedImages.sort((a, b) => a.filename.localeCompare(b.filename, undefined, { numeric: true, sensitivity: 'base' }));
+
+                    const overlay = document.createElement('div');
+                    overlay.className = 'fullscreen-overlay';
+                    
+                    const textSide = document.createElement('div');
+                    textSide.className = 'fullscreen-text-side';
+
+                    if (group === '2602') {
+                        textSide.innerHTML = `
+                            <div class="lang-de-block">
+                                2602 LEPUS<br/>
+                                Ein Zuhause für Menschen mit Behinderung mit Gemeinschaftszentrum und Arbeitsstätte<br/><br/>
+                                Status: Wettbewerb 2026<br/>
+                                Ort: Wigoltingen, Thurgau, Schweiz<br/>
+                                Fläche: 5´000 m2<br/>
+                                Nutzung: Lebensraum Dorfzentrum<br/><br/>
+                                Architektur: LINYER / Fichter+<br/>
+                                Landschaftsarchitektur: Simone Pletscher<br/>
+                                Bauingenieur: Timbatec AG<br/>
+                                Bauherrschaft: Stiftung Lebensorte<br/><br/>
+                                Wie kann eine dichte Wohntypologie im ländlichen Dorfkern integriert werden?&nbsp;<br/><br/>
+                                Drei neue Volumen portionieren sich zwischen bestehenden Grünräumen und bilden eine offene Hofsituation. Das Thurgauer Bauernhaus, ein länglicher Riegelbau, diente uns als Grundlage für die Entwicklung einer kollektiven Wohnform.&nbsp;<br/><br/>
+                                Eine klare Grundrissgestaltung definiert Zugang, Gemeinschafts- und Individualbereich und Aussenraum. Das Dachgeschoss übernimmt die prominente Dachform geprägt von Gauben der lokalen Baukultur und sichert allen Räumen einen rollstuhlgerechten Zugang zur Fassade.
+                            </div>
+                            <div class="lang-sv-block" style="display:none;">
+                                2602 LEPUS<br/>
+                                Ett hem för personer med funktionsnedsättning med gemenskapscenter och arbetsplats<br/><br/>
+                                Status: Tävling 2026<br/>
+                                Plats: Wigoltingen, Thurgau, Schweiz<br/>
+                                Yta: 5 000 m2<br/>
+                                Användning: Livsmiljö i byns centrum<br/><br/>
+                                Arkitektur: LINYER / Fichter+<br/>
+                                Landskapsarkitektur: Simone Pletscher<br/>
+                                Byggnadsingenjör: Timbatec AG<br/>
+                                Beställare: Stiftung Lebensorte<br/><br/>
+                                Hur kan en tät bostadstypologi integreras i en lantlig bykärna?&nbsp;<br/><br/>
+                                Tre nya volymer placerar sig mellan befintliga grönområden och skapar en öppen gårdssituation. Thurgau-bondgården, en långsträckt korsvirkesbyggnad, fungerade som grund för utvecklingen av en kollektiv boendeform.&nbsp;<br/><br/>
+                                En tydlig planlösning definierar entré, gemensamma och privata ytor samt uterum. Vindsvåningen fångar den framträdande takformen med takkupor från den lokala byggnadskulturen och säkerställer att alla rum har rullstolsanpassad tillgång till fasaden.
+                            </div>
+                        `;
+                    } else if (group === '2605') {
+                        textSide.innerHTML = `
+                            <div class="lang-de-block">
+                                2506 ZWISCHEN HAUS UND DORF<br/>
+                                Alters-, Pflege- und Wohnheim in den Schweizeralpen<br/><br/>
+                                Status: Wettbewerb 2026<br/>
+                                Ort: Fiesch, Wallis, Schweiz<br/>
+                                Fläche (BGF): 5´000 m2<br/>
+                                Nutzung: Alters- und Pflegeheim<br/>
+                                Bauherr: Stiftung St.Theodul Fiesch<br/><br/>
+                                Was passiert bei einer Gegenüberstellung von Dorf und Grossstruktur?&nbsp;<br/><br/>
+                                In diesem Projekt sahen wir das Leben im Altersheim als Fortsetzung des Dorflebens und arbeiteten mit dem dörflichen Massstab in der Grossstruktur. Das Volumen orientiert sich an der Landschaft und der Sonne. Drei Zimmereinheiten bilden ein Haus, welches die Proportionen eines Walliserhauses aufgreift. Die Häuser stehen entlang einer Dorfstrasse, dem Gang, welcher zum Dorfplatz, dem Gemeinschaftsraum, führt, wo das kollektive Leben stattfindet. Ein reiner Holzbau mit sichtbaren Brettstapeldecken unterstreicht den Bezug zur lokalen Baukultur.
+                            </div>
+                            <div class="lang-sv-block" style="display:none;">
+                                2506 MELLAN HUS OCH BY<br/>
+                                Äldreboende i de schweiziska alperna<br/><br/>
+                                Status: Tävling 2026<br/>
+                                Plats: Fiesch, Wallis, Schweiz<br/>
+                                Yta (BTA): 5 000 m2<br/>
+                                Användning: Äldreboende<br/>
+                                Beställare: Stiftung St.Theodul Fiesch<br/><br/>
+                                Vad händer när en by ställs mot en storskalig struktur?&nbsp;<br/><br/>
+                                I detta projekt såg vi livet på äldreboendet som en fortsättning på bylivet och arbetade med byns skala i den storskaliga strukturen. Volymen orienterar sig efter landskapet och solen. Tre rumsenheter bildar ett hus som fångar proportionerna hos ett typiskt Walliserhus. Husen står längs en bygata – korridoren – som leder till bytorget, gemenskapsrummet, där det kollektiva livet äger rum. En ren träkonstruktion med synliga massivträbjälklag understryker kopplingen till den lokala byggnadskulturen.
+                            </div>
+                        `;
+                    } else if (group === '2406') {
+                        textSide.innerHTML = `
+                            <div class="lang-de-block">
+                                2406 FERIENHAUS SAMUN<br/>
+                                Sanierung mit neuer Innenraumgestaltung<br/><br/>
+                                Status: Fertiggestellt 2026<br/>
+                                Ort: Falera, Graubünden, Schweiz<br/>
+                                Fläche (BGF): 150 m2<br/>
+                                Nutzung: Ferienhaus<br/>
+                                Bauherr: Privat<br/><br/>
+                                Wie kann Bausubstanz sensibel gepflegt und gleichzeitig an die Ansprüche einer neuen Generation angepasst werden?&nbsp;<br/><br/>
+                                Für dieses Maintenance-Projekt suchten wir nach Lösungen, die mit kleinen Eingriffen einen grossen Mehrwert erzielen. Die Sanierung umfasste eine energetische Erneuerung des Daches, die Fassaden wurden teilweise neu verputzt und der Anschluss an die Umgebung wurde instand gesetzt. Die Innenräume wurden mit einem neuen Kalkboden und einer sorgfältig entworfenen Möblierung aus Massivholz modernisiert.
+                            </div>
+                            <div class="lang-sv-block" style="display:none;">
+                                2406 FRITIDSHUS SAMUN<br/>
+                                Renovering med ny inredning<br/><br/>
+                                Status: Färdigställt 2026<br/>
+                                Plats: Falera, Graubünden, Schweiz<br/>
+                                Yta (BTA): 150 m2<br/>
+                                Användning: Fritidshus<br/>
+                                Beställare: Privat<br/><br/>
+                                Hur kan en befintlig byggnad underhållas varsamt och samtidigt anpassas till en ny generations behov?&nbsp;<br/><br/>
+                                För detta underhållsprojekt sökte vi lösningar som med små ingrepp skapar ett stort mervärde. Renoveringen omfattade en energimässig förnyelse av taket, fasaderna omputsad delvis och anslutningen till omgivningen återställdes. Interiören moderniserades med ett nytt kalkgolv och noggrant utformade möbler i massivt trä.
+                            </div>
+                        `;
+                    } else if (group === '10_series') {
+                        textSide.innerHTML = `
+                            <div class="lang-de-block">
+                                2101 HAUS FÜR ZWEI BRÜDER<br/>
+                                Selbstgebautes Ferienhaus aus massivem Holz<br/><br/>
+                                Status: Fertiggestellt 2025<br/>
+                                Ort: Idre Fjäll, Dalarna, Schweden<br/>
+                                Fläche (BGF): 220 m2<br/>
+                                Nutzung: Ferienhaus<br/>
+                                Rohbau: Tender<br/>
+                                Bauherr: Privat<br/><br/>
+                                Wie schafft man Baukultur in neu erschlossenen Gebieten?&nbsp;<br/><br/>
+                                Das Haus ist Teil einer frisch gerodeten Erweiterung des Dorfes. Die grüne Wiese als Ausgangspunkt lehrte uns, dass lokale Baukultur auch durch Ressourcen wie Material und Arbeitskraft bestimmt wird. Das Haus wurde in traditioneller Blockbauweise errichtet. Die Länge eines Baumstammes diente als Ausgangspunkt, um das Haus in vier Baukörper zu gliedern. Diese Baukörper sind zueinander versetzt, um das Haus an die Gegebenheiten des Grundstücks anzupassen und zugleich die einzelnen Bereiche funktional zu definieren.&nbsp;<br/><br/>
+                                Die Platzierung und Kubatur des Hauses auf dem Grundstück ermöglichen eine spätere, separate Bebauung. Mit einer solchen Ergänzung würden die Baukörper gemeinsam einen offenen Innenhof nach Süden rahmen, angelehnt an die lokale Bauernhaus-Typologie.
+                            </div>
+                            <div class="lang-sv-block" style="display:none;">
+                                2101 HUS FÖR TVÅ BRÖDER<br/>
+                                Självbyggt fritidshus i massivt trä<br/><br/>
+                                Status: Färdigställt 2025<br/>
+                                Plats: Idre Fjäll, Dalarna, Sverige<br/>
+                                Yta (BTA): 220 m2<br/>
+                                Användning: Fritidshus<br/>
+                                Stomme: Tender<br/>
+                                Beställare: Privat<br/><br/>
+                                Hur skapar man byggnadskultur i nyligen exploaterade områden?&nbsp;<br/><br/>
+                                Huset är en del av en nyligen röjd utbyggnad av byn. Den öppna platsen som utgångspunkt lärde oss att lokal byggnadskultur också bestäms av resurser som material och arbetskraft. Huset byggdes i traditionell timringsteknik. Längden på en timmerstock fungerade som utgångspunkt för att dela in huset i fyra byggnadskroppar. Dessa är förskjutna i förhållande till varandra för att anpassa huset till tomten och samtidigt funktionellt definiera de olika delarna.&nbsp;<br/><br/>
+                                Husets placering och volym på tomten möjliggör en framtida, separat bebyggelse. Med en sådan komplettering skulle byggnadskropparna tillsammans rama in en öppen innergård mot söder, inspirerad av den lokala bondgårdstypologin.
+                            </div>
+                        `;
+                    } else {
+                        textSide.innerHTML = text.innerHTML;
+                    }
+                    
+                    const imgSide = document.createElement('div');
+                    imgSide.className = 'fullscreen-img-side';
+                    
+                    relatedImages.forEach(item => {
+                        const singleImg = document.createElement('img');
+                        singleImg.className = 'fullscreen-single-img';
+                        singleImg.src = item.img.src;
+                        singleImg.alt = item.img.alt;
+                        imgSide.appendChild(singleImg);
+                    });
+                    
+                    overlay.appendChild(textSide);
+                    overlay.appendChild(imgSide);
+                    
+                    const closeHandler = function(e) {
+                        if (e.key === 'Escape') {
+                            document.body.removeChild(overlay);
+                            document.removeEventListener('keydown', closeHandler);
+                        }
+                    };
+                    document.addEventListener('keydown', closeHandler);
+                    
+                    const closeBtn = document.createElement('div');
+                    closeBtn.className = 'fullscreen-close-btn';
+                    closeBtn.innerHTML = '+';
+                    closeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        document.body.removeChild(overlay);
+                        document.removeEventListener('keydown', closeHandler);
+                    });
+                    overlay.appendChild(closeBtn);
+                    
+                    document.body.appendChild(overlay);
+
+                    const currentLang = localStorage.getItem('linyer_lang') || 'de';
+                    switchLang(currentLang);
+                });
+            });
+        });
+    </script>
+</head>
+<body class="index-page">
+    <div class="linyer-tab">
+        <!-- Links: INFO & E-Mail -->
+        <div class="linyer-tab-section linyer-tab-left">
+            <a href="contact.html" class="linyer-tab-link">INFO</a>
+            <div>contact@linyer.info</div>
+        </div>
+        <!-- Mitte: Logo -->
+        <div class="linyer-tab-section linyer-tab-center">
+            <a href="index.html" class="linyer-tab-link">LINYER</a>
+        </div>
+        <!-- Rechts: PROJEKTE & Sprache -->
+        <div class="linyer-tab-section linyer-tab-right">
+            <a href="index.html" class="linyer-tab-link active-lang lang-de">PROJEKTE</a>
+            <a href="index.html" class="linyer-tab-link active-lang lang-sv" style="display:none;">PROJEKT</a>
+            <div>
+                <a href="#" onclick="switchLang('de'); return false;" class="linyer-tab-link lang-btn-de active-lang">de.</a>
+                <a href="#" onclick="switchLang('sv'); return false;" class="linyer-tab-link lang-btn-sv">sv.</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="img-columns">
+        <div class="img-hover-container">
+            <img src="img/INDEX_10.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">2101 HUS FÖR TVÅ BRÖDER<br/>Idre Fjäll, Dalarna, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_11.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">2101 HUS FÖR TVÅ BRÖDER<br/>Idre Fjäll, Dalarna, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_12.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">2101 HUS FÖR TVÅ BRÖDER<br/>Idre Fjäll, Dalarna, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_13.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">2101 HUS FÖR TVÅ BRÖDER<br/>Idre Fjäll, Dalarna, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_15.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">2101 HUS FÖR TVÅ BRÖDER<br/>Idre Fjäll, Dalarna, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_16.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">2101 HUS FÖR TVÅ BRÖDER<br/>Idre Fjäll, Dalarna, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_17.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">2101 HUS FÖR TVÅ BRÖDER<br/>Idre Fjäll, Dalarna, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_18.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">2101 HUS FÖR TVÅ BRÖDER<br/>Idre Fjäll, Dalarna, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_19.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">2101 HUS FÖR TVÅ BRÖDER<br/>Idre Fjäll, Dalarna, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_20.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">DIE SÄULENHALLE: ENDLICH EIN ZENTRUM FÜR ZÜRICH WEST<br/>Illustrationen für das Themenheft der Juni 2025 Ausgabe des Hochparterres mit Nando von Arb<br/>Zürich, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_21.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">DIE SÄULENHALLE: ENDLICH EIN ZENTRUM FÜR ZÜRICH WEST<br/>Illustrationen für das Themenheft der Juni 2025 Ausgabe des Hochparterres mit Nando von Arb<br/>Zürich, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_22.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">DIE SÄULENHALLE: ENDLICH EIN ZENTRUM FÜR ZÜRICH WEST<br/>Illustrationen für das Themenheft der Juni 2025 Ausgabe des Hochparterres mit Nando von Arb<br/>Zürich, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_23.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">DIE SÄULENHALLE: ENDLICH EIN ZENTRUM FÜR ZÜRICH WEST<br/>Illustrationen für das Themenheft der Juni 2025 Ausgabe des Hochparterres mit Nando von Arb<br/>Zürich, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">SÄULENHALLEN: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICH WEST<br/>Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb<br/>Zürich, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_30.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">MUSIKSCHULE "DER HOLLÄNDER"<br/>mit Dalla Santa Birkeland Arkitektur<br/>Cham, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">"DER HOLLÄNDER"<br/>sammarbete Dalla Santa Birkeland Arkitektur<br/>Musikskolan, Cham, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_31.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">DER HOLLÄNDER<br/>mit Dalla Santa Birkeland Arkitektur<br/>Musikschule, Cham, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">«DER HOLLÄNDER»<br/>tävling för en musikskola med Dalla Santa Birkeland Arkitektur<br/>Musikskolan, Cham, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_32.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">DER HOLLÄNDER<br/>mit Dalla Santa Birkeland Arkitektur<br/>Musikschule, Cham, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">«DER HOLLÄNDER»<br/>tävling för en musikskola med Dalla Santa Birkeland Arkitektur<br/>Musikskolan, Cham, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_33.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">DER HOLLÄNDER<br/>mit Dalla Santa Birkeland Arkitektur<br/>Musikschule, Cham, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">"DER HOLLÄNDER»<br/>tävling för en musikskola med Dalla Santa Birkeland Arkitektur<br/>Musikskolan, Cham, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_34.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">DER HOLLÄNDER<br/>mit Dalla Santa Birkeland Arkitektur<br/>Musikschule, Cham, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">«DER HOLLÄNDER»<br/>tävling för en musikskola med Dalla Santa Birkeland Arkitektur<br/>Musikskolan, Cham, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_35.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">DER HOLLÄNDER<br/>mit Dalla Santa Birkeland Arkitektur<br/>Musikschule, Cham, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">«DER HOLLÄNDER»<br/>tävling för en musikskola med Dalla Santa Birkeland Arkitektur<br/>Musikskolan, Cham, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_40.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">EINE STADT OHNE SCHLACHTHOF?<br/>Diplom mit Prof. Momoyo Kaijima, ETHZ<br/>Zürich, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">EN STAD UTAN SLAKTHUS?<br/>Diplom med Prof. Momoyo Kaijima, ETHZ<br/>Zürich, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_41.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">EINE STADT OHNE SCHLACHTHOF?<br/>Diplom mit Prof. Momoyo Kaijima, ETHZ<br/>Zürich, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">EN STAD UTAN SLAKTHUS?<br/>Diplom med Prof. Momoyo Kaijima, ETHZ<br/>Zürich, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_42.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">EINE STADT OHNE SCHLACHTHOF?<br/>Diplom mit Prof. Momoyo Kaijima, ETHZ<br/>Zürich, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">EN STAD UTAN SLAKTHUS?<br/>Diplom med Prof. Momoyo Kaijima, ETHZ<br/>Zürich, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_50.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">WIEDERVERWENDUNG SNÄCKAN 8<br/>KTH, Stockholm, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">ÅTERANVÄNDNING AV SNÄCKAN 8<br/>KTH, Stockholm, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_51.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">WIEDERVERWENDUNG SNÄCKAN 8<br/>KTH, Stockholm, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">ÅTERANVÄNDNING AV SNÄCKAN 8<br/>KTH, Stockholm, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_70.jpeg" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">KERAMIK PAVILLION<br/>Stockholm, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">KERAMIKPAVILJONG<br/>Stockholm, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_71.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">KERAMIK PAVILLION<br/>Stockholm, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">KERAMIKPAVILJONG<br/>Stockholm, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_80.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">GOTTSUNDA SKOG<br/>Letzte Runde für den Wettbewerb Europan 18 mit Studio Era<br/>Gottsunda, Uppsala, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>Sista omgången i tävlingen Europan 18, med Landskapsarkitektur Studio Era<br/>Gottsunda, Uppsala, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_81.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">GOTTSUNDA SKOG<br/>Letzte Runde für den Wettbewerb Europan 18 mit Studio Era<br/>Gottsunda, Uppsala, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>Sista omgången i tävlingen Europan 18, med Landskapsarkitektur Studio Era<br/>Gottsunda, Uppsala, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_82.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">GOTTSUNDA SKOG<br/>Letzte Runde für den Wettbewerb Europan 18 mit Studio Era<br/>Gottsunda, Uppsala, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>Sista omgången i tävlingen Europan 18, med Landskapsarkitektur Studio Era<br/>Gottsunda, Uppsala, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_83.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">GOTTSUNDA SKOG<br/>Letzte Runde für den Wettbewerb Europan 18 mit Studio Era<br/>Gottsunda, Uppsala, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>Sista omgången i tävlingen Europan 18, med Landskapsarkitektur  Studio Era<br/>Gottsunda, Uppsala, Sverige</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_84.gif" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">GOTTSUNDA SKOG<br/>Letzte Runde für den Wettbewerb Europan 18 mit Studio Era<br/>Gottsunda, Uppsala, Schweden</span>
+                <span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>Sista omgången i tävlingen Europan 18, med Landskapsarkitektur Studio Era<br/>Gottsunda, Uppsala, Sverige</span>
+            </div>
+        </div>
+
+        <!-- 2406 (Projekt 2406: INDEX_2406_01.png bis INDEX_2406_13.png) -->
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_01.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_02.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_03.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_04.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_05.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_06.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_07.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_08.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_09.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_10.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_11.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_12.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2406_13.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span>
+            </div>
+        </div>
+
+        <!-- 2605 (Projekt 2506: INDEX_2605_01.png bis INDEX_2605_09.png) -->
+        <div class="img-hover-container">
+            <img src="img/INDEX_2605_01.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2605_02.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2605_03.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2605_04.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2605_05.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2605_06.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2605_07.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2605_08.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2605_09.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span>
+            </div>
+        </div>
+
+        <!-- 2602 (Projekt 2602 LEPUS: INDEX_2602_01.png bis INDEX_2602_10.png) -->
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_01.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_02.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_03.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_04.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_05.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_06.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_07.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_08.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_09.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+        <div class="img-hover-container">
+            <img src="img/INDEX_2602_10.png" alt="LINYER Bild" class="hover-img" />
+            <div class="img-hover-text">
+                <span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span>
+                <span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
