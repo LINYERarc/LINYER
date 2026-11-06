@@ -68,12 +68,18 @@
                     updateContactImage();
                 });
 
-                // Scrollen schaltet immer in eine Richtung weiter
-                rightSide.addEventListener('wheel', function(e) {
-                    e.preventDefault();
-                    currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
-                    updateContactImage();
-                }, { passive: false });
+// Mausrad schaltet je nach Scroll-Richtung vor oder zurück
+rightSide.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    if (e.deltaY > 0) {
+        // Nach unten scrollen -> Nächstes Bild
+        currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
+    } else {
+        // Nach oben scrollen -> Vorheriges Bild
+        currentContactImgIndex = (currentContactImgIndex - 1 + contactImages.length) % contactImages.length;
+    }
+    updateContactImage();
+}, { passive: false });
 
                 let touchStartX = 0;
                 rightSide.addEventListener('touchstart', function(e) {

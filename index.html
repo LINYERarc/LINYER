@@ -330,12 +330,18 @@
                         updateActiveImage();
                     });
 
-                    // Scrollen schaltet immer nur in eine Richtung weiter (vorwärts)
+                    // Mausrad schaltet je nach Scroll-Richtung vor oder zurück
                     imgSide.addEventListener('wheel', function(e) {
-                        e.preventDefault();
-                        currentImgIndex = (currentImgIndex + 1) % relatedImages.length;
-                        updateActiveImage();
-                    }, { passive: false });
+                    e.preventDefault();
+    if (e.deltaY > 0) {
+        // Nach unten scrollen -> Nächstes Bild
+        currentImgIndex = (currentImgIndex + 1) % relatedImages.length;
+    } else {
+        // Nach oben scrollen -> Vorheriges Bild
+        currentImgIndex = (currentImgIndex - 1 + relatedImages.length) % relatedImages.length;
+    }
+    updateActiveImage();
+}, { passive: false });
 
                     let touchStartX = 0;
                     imgSide.addEventListener('touchstart', function(e) {
