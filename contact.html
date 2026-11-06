@@ -2,27 +2,93 @@
 <html lang="de" id="html-root">
 <head>
     <meta charset="utf-8"/>
-    <title id="page-title">LINYER INFO de.</title>
+    <title id="page-title">LINYER Architektur</title>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <link rel="stylesheet" href="index.css">
+    <style>
+        /* Spezifische Anpassung für Mobile: Text zuerst, Bilder danach */
+        @media (max-width: 800px) {
+            .contact-container {
+                flex-direction: column !important;
+            }
+        }
+    </style>
     <script>
         function switchLang(lang) {
             const root = document.getElementById('html-root');
             root.setAttribute('lang', lang);
             
-            document.querySelectorAll('.lang-de').forEach(el => el.style.display = (lang === 'de') ? 'block' : 'none');
-            document.querySelectorAll('.lang-sv').forEach(el => el.style.display = (lang === 'sv') ? 'block' : 'none');
+            document.querySelectorAll('.lang-de').forEach(el => el.style.display = (lang === 'de') ? 'inline-block' : 'none');
+            document.querySelectorAll('.lang-de-block').forEach(el => el.style.display = (lang === 'de') ? 'block' : 'none');
+            document.querySelectorAll('.lang-sv').forEach(el => el.style.display = (lang === 'sv') ? 'inline-block' : 'none');
+            document.querySelectorAll('.lang-sv-block').forEach(el => el.style.display = (lang === 'sv') ? 'block' : 'none');
             
             document.querySelectorAll('.lang-btn-de').forEach(el => el.classList.toggle('active-lang', lang === 'de'));
             document.querySelectorAll('.lang-btn-sv').forEach(el => el.classList.toggle('active-lang', lang === 'sv'));
             
-            document.getElementById('page-title').textContent = (lang === 'de') ? 'LINYER INFO de.' : 'LINYER INFO sv.';
+            document.getElementById('page-title').textContent = (lang === 'de') ? 'LINYER Architektur' : 'LINYER Arkitektur';
             localStorage.setItem('linyer_lang', lang);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             const savedLang = localStorage.getItem('linyer_lang') || 'de';
             switchLang(savedLang);
+
+            // Kontaktbilder-Interaktion (Scrollen schaltet immer vorwärts)
+            const contactImages = [
+                { src: 'img/CONTACT_Lowis.gif', alt: 'Lowis Gujer' },
+                { src: 'img/CONTACT_Emma.gif', alt: 'Emma Lindén' }
+            ];
+            let currentContactImgIndex = 0;
+
+            const rightSide = document.querySelector('.contact-right');
+            if (rightSide) {
+                rightSide.innerHTML = '';
+                rightSide.style.display = 'flex';
+                rightSide.style.flexDirection = 'column';
+                rightSide.style.justifyContent = 'center';
+                rightSide.style.alignItems = 'center';
+                rightSide.style.overflow = 'hidden';
+                rightSide.style.height = '100%';
+
+                const singleImg = document.createElement('img');
+                singleImg.className = 'fullscreen-single-img';
+                
+                function updateContactImage() {
+                    const item = contactImages[currentContactImgIndex];
+                    singleImg.src = item.src;
+                    singleImg.alt = item.alt;
+                }
+                updateContactImage();
+                rightSide.appendChild(singleImg);
+
+                singleImg.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
+                    updateContactImage();
+                });
+
+                // Scrollen schaltet immer in eine Richtung weiter
+                rightSide.addEventListener('wheel', function(e) {
+                    e.preventDefault();
+                    currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
+                    updateContactImage();
+                }, { passive: false });
+
+                let touchStartX = 0;
+                rightSide.addEventListener('touchstart', function(e) {
+                    touchStartX = e.touches[0].clientX;
+                }, { passive: true });
+
+                rightSide.addEventListener('touchend', function(e) {
+                    let touchEndX = e.changedTouches[0].clientX;
+                    let diff = touchStartX - touchEndX;
+                    if (Math.abs(diff) > 50) {
+                        currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
+                        updateContactImage();
+                    }
+                }, { passive: true });
+            }
         });
     </script>
 </head>
@@ -47,132 +113,81 @@
             </div>
         </div>
     </div>
-
+    
     <div class="contact-container">
-        <!-- LEFT BOX: Contact Info & Office Description -->
+        <!-- Linke Spalte: Gesamter Text (DE & SV) -->
         <div class="contact-left">
-            <!-- Deutsch -->
-            <div class="lang-de">
-                LINYER ist ein Architekturbüro mit Sitz in Stockholm und Zürich, gegründet und betrieben von Lowis Gujer und Emma Lindén seit 2024. 
-                In ihrem Schaffen legen sie den Fokus auf kleine Projekte mit lokalen Akteuren und natürlichen Baumaterialien. 
-                Oftmals sind sie auf der Suche nach architektonischer Formgebung, die mit den vorliegenden Ressourcen zusammenhängen: 
-                Weiterbauen, Wiederverwenden, und wenn Neu, dann mit biogenen Baumaterialien wie zum Beispiel Holz. 
-                Ihr Interessen umfassen eine breite Palette von Themen wie Entwürfe für öffentliche Gebäude und Bildungseinrichtungen, 
-                konstruktive Detaillösungen im Massstab 1:1, Visualisierung von Ideen durch Illustrationen und Modelle, Lehre und öffentliche Workshops, 
-                Stadtplanung und Schreiben.<br/><br/>
-                Emma Lindén (geb. 1994, Stockholm SE) ist Architektin SAR/MSA. Während ihres Studiums an der Königlichen Technischen Hochschule Stockholm absolvierte sie ein Austauschjahr an der ETHZ. Sie arbeitete für General Architecture, Lütjens Padmanabhan, Maich Swift und Boltshauser Architekten.<br/><br/>
-                Lowis Gujer (geb. 1995, Zürich CH) ist Architekt MSc Arch. ETHZ. Er schloss sein Studium an der ETHZ mit einer Diplomarbeit zum Thema „Eine Stadt ohne Schlachthof?“ unter der Leitung von Prof. Momoyo Kaijima ab. Nach Erfahrungen in Architekturbüros in Zürich, Stockholm und London arbeitet er seit Anfang 2024 am Lehrstuhl für Architectural Behaviorology. Dort ist er als wissenschaftlicher Assistent für den Entwurfskurs im zweiten Jahr, den Masterkurs "Japan Studio" und weitere Lehrprojekte tätig.<br/><br/><br/>
+            <div class="lang-de-block">
+                LINYER ist ein Architekturbüro, gegründet und betrieben seit 2024, welches in Stockholm und Zürich operiert. 
+                <br/><br/>
+                In unserem Schaffen legen wir den Fokus auf Weiterbauen, Wiederverwenden, und wenn Neu, dann mit biogenen Baumaterialien wie zum Beispiel Holz. Jedes Projekt beginnt mit einer gründlichen Auseinandersetzung mit den lokalen Begebenheiten und den Wünschen der Klient:in. Unsere Interessen umfassen eine breite Palette; Entwürfe für öffentliche Gebäude, konstruktive Detaillösungen, stadtplanerische Ideen, Lehre und Schreiben.
+                <br/><br/>  
+                Emma Lindén (geb. 1994, Stockholm SE) ist Architektin SAR/MSA. Während ihres Studiums an der Königlichen Technischen Hochschule Stockholm absolvierte sie ein Austauschjahr an der ETHZ. Sie arbeitete für General Architecture, Lütjens Padmanabhan, Maich Swift und Boltshauser Architekten.
+                <br/><br/>
+                Lowis Gujer (geb. 1995, Zürich CH) ist Architekt MSc Arch. ETHZ. He schloss sein Studium an der ETHZ 2023. Nach Erfahrungen in Architekturbüros in Zürich, Stockholm und London arbeitet er seit Anfang 2024 am Lehrstuhl für Architectural Behaviorology und lehrt für Prof. Momoyo Kaijima Entwurf.
+                <br/><br/>
                 contact@linyer.info<br/>
                 +41 76 220 62 84<br/>
                 +46 76 341 09 01<br/>
                 Hofwiesenstrasse 191<br/>
                 8057 Zürich<br/>
-                UID: CHE-340.689.567<br/>
-            </div>
+                UID: CHE-340.689.567<br/><br/>
+                
+                <strong>LEHRE</strong><br/><br/>
+                <a href="https://kaijima.arch.ethz.ch/news/call-for-entries-japan-studio-iii-seminar-week-25hs-feldis-veulden/">JAPAN STUDIO 3 "STONE, WOOD, SOIL"</a><br/>Lehrassistent für den Entwurfskurs im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
+                <a href="https://kaijima.arch.ethz.ch/news/call-for-summer-workshop-bamboo-greenhouse/">BAMBUS GEWÄCHSHAUS</a><br/>Lehrassistent für den Workshop im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
+                <a href="https://kaijima.arch.ethz.ch/news/call-for-focus-work-climate-kitchen/">KLIMA KÜCHE</a><br/>Lehrassistent für den Workshop im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
+                <a href="https://systems.arch.ethz.ch/studios-workshops/design-for-climate-202">DESIGN FOR CLIMATE</a><br/>Lehrassistent für den Entwurfskurs im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
+                <a href="https://www.otelfingen.ch/gemeinde/aktuelles/projekte/care-hubs-neue-orte-der-begegnung-fuer-otelfingen.html/1245">JAPAN STUDIO 2 "CARE HUBS"</a><br/>Lehrassistent für den Entwurfskurs im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
+                <a href="https://kaijima.arch.ethz.ch/academic_year/fs24/?filter=1">PUBLIC SPACE BEHAVIOROLOGY</a><br/>Lehrassistent für den Entwurfskurs im zweiten Jahr am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/><br/>
 
-            <!-- Schwedisch -->
-            <div class="lang-sv" style="display:none;">
-                LINYER är ett arkitektkontor med säte i Stockholm och Zürich, grundat och drivet av Lowis Gujer och Emma Lindén sedan 2024. 
-                I deras arbete ligger fokus på lokala och småskaliga projekt samt användning av naturliga byggmaterial. 
-                Ofta söker de en arkitektonisk form som förhåller sig till de resurser som finns: vidarebyggnad, återanvändning, och om nytt – då i biogena material såsom trä. 
-                Deras intressen inkluderar förslag för offentliga byggnader och utbildningslokaler, konstruktiva detaljlösningar i skala 1:1, visualisering av idéer genom illustrationer och modeller, undervisning och offentliga workshops, stadsplanering och skrivande.<br/><br/>
-                Emma Lindén (f. 1994, Stockholm SE) är arkitekt SAR/MSA. Under sina studier vid Kungliga Tekniska Högskolan i Stockholm genomförde hon ett utbytesår vid ETHZ. Hon har arbetat på General Architecture, Lütjens Padmanabhan, Maich Swift och Boltshauser Architekten.<br/><br/>
-                Lowis Gujer (f. 1995, Zürich CH) är arkitekt MSc Arch. ETHZ. Han avslutade sina studier vid ETHZ med ett examensarbete med titeln "Eine Stadt ohne Schlachthof?" under ledning av Prof. Momoyo Kaijima. Efter erfarenheter från arkitektkontor i Zürich, Stockholm och London arbetar han sedan början av 2024 vid Chair of Architectural Behaviorology. Där är han vetenskaplig assistent för designkursen i år 2, masterkursen "Japan Studio" och andra undervisningsprojekt.<br/><br/><br/>
-                contact@linyer.info<br/>
-                +41 76 220 62 84<br/>
-                +46 76 341 09 01<br/>
-                Hofwiesenstrasse 191<br/>
-                8057 Zürich<br/>
-                UID: CHE-340.689.567<br/>
+                <strong>PUBLIKATIONEN</strong><br/><br/>
+                BERGDÖRFER UND IHRE MÖGLICHE ENTWICKLUNG<br/>Interview in der Lokalzeitung "Pöschtli" über das Japan Studio 3 "STONE, WOOD, SOIL" im Rahmen des Lehrprojekts Domleschg, Schweiz, 2025<br/>mit Stefan Kurath, Thomas Weiss, Michael Wagner, Oscar Buscon, Kees Christiaanse<br/><br/>
+                <a href="https://www.hochparterre.ch/nachrichten/planung-staedtebau/die-saeulenhalle-endlich-ein-zentrum-fuer-zuerich-west">2407 - DIE SÄULENHALLE: ENDLICH EIN ZENTRUM FÜR ZÜRICH WEST!</a><br/>Themenheft des Architekturmagazins Hochparterre, Zürich, Schweiz, 2025<br/>Arbeitsgruppe: Martin Hofer (Architekt und Immobilienfachmann, Leiter und Konzeptverfasser), Köbi Gantenbein (Soziologem, Leiter und Sekretär), Dominique Ghiggi (Landschaftsarchitektin, Ghiggi Paesaggi Landschaft und Städtebau, Zürich), Christoph Gysi (Präsident der "Vereinigung Industrict Zürich West, aus Industrie wird Kultur", Zürich), Christoph Kellenberger (Architekt und Gründungspartner Büro OOS, Zürich), Markus Knauss (Co-Geschäftsleiter des Verkehrs-Clubs der Schweiz und Gemeinderat), Maresa Kuhn (Stadt- und Projektentwicklerin im Büro Belebung & Begegnung, Zürich), Jordi Riegg (Raum- und Verkehrsplaner im Büro Rombo, Zürich), Alain Thierstein (Stadtentwickler, Delegierter Hamasil Stiftung), Hamasil Stiftung (Auftraggeberin, Finanzierung)<br/><a href="https://nandovonarb.ch/">Illustrationen mit Nando von Arb</a><br/><br/>
+                <a href="https://www.furttaler.ch/aktuelles/detail?tx_news_pi1%5Baction%5D=detail&tx_news_pi1%5Bcontroller%5D=News&tx_news_pi1%5Bnews%5D=250118&cHash=5c51538c0a846e16fec72b9e55e24a98">"DAS INTERESSE DER OTELFINGER FREUT UNS"</a><br/>Interview in der Lokalzeitung "Furttaler" über das Japan Studio 2 "Care Hubs", Schweiz, 2024<br/><br/>
+                <a href="https://www.hochparterre.ch/campus/eine-stadt-ohne-schlachthof">2302 EINE STADT OHNE SCHLACHTHOF?</a><br/>Artikel für die Campusrubrik des Architekturmagazins Hochparterre, Zürich, Schweiz, 2024<br/><br/>
+                <a href="https://trans.ethz.ch/issue/time">2301 - TRANS MAGAZIN #42 TIME</a><br/>Redaktion des Architekturmagazins trans des Architekturdepartements der ETH, Zürich, Schweiz, 2023<br/>Co-Redaktion: Tatjana Bergmeister, Carolina Catarino Gomes, Zoé Rüttimann<br/><br/>
+                <a href="https://trans.ethz.ch/issue/fire-1">2203 - TRANS MAGAZIN #41 FIRE</a><br/>Redaktion des Architekturmagazins trans des Architekturdepartements der ETH, Zürich, Schweiz, 2023<br/>Co-Redaktion: Sebastian Baumann, Tatjana Bergmeister, Sophia Garner<br/><br/>
+                <a href="https://doi.org/10.5169/seals-981501">2102 - WORK IS OVER</a><br/>Artikel für die 38. Ausgabe des Architekturmagazins trans "REPRODUCTION" des Architekturdepartements der ETH, Zürich, Schweiz, 2021<br/>
             </div>
-        </div>
-
-        <!-- RIGHT BOX: Image & Sub-columns -->
-        <div class="contact-right">
-            <img src="img/CONTACT_03.jpeg" alt="LINYER Bild" />
             
-            <div class="right-columns-wrapper">
-                <!-- Spalte 1: Projekte -->
-                <div class="right-column-projects">
-                    <span class="lang-de">PROJEKTLISTE</span>
-                    <span class="lang-sv" style="display:none;">PROJEKTLISTA</span>
-                    <br/><br/>
-                    <div class="lang-de">
-                        2504 - HUSA<br/>Renovation eines Blockhauses in Hälsingland, Schweden, 2025, Studie<br/>Bauherrschaft: Privat<br/><br/>
-                        2503 - BORTSÄNKES MOT NEDMONTERING<br/>Bewerbung für das Einar Mattson Stipendium, ArkDes, Stockholm, Schweden, 2025, Bewerbung<br/><a href="https://www.contemfurniture.com/">mit Unterstützung von CONTEM</a><br/><br/>
-                        2502 - GOTTSUNDA SKOG<br/>600 Wohneinheiten, Kindergarten und Umbau des Gottsunda Center in Uppsala, Schweden, 2025, Wettbewerb (letzte Runde)<br/>Landschaftarchitektur: Studio Era<br/>Bauherrschaft: Uppsala Kommun / Hemmaplan<br/><br/>
-                        2406 - FH SAMUN<br/>Renovation eines Ferienhauses in Falera, Schweiz, 2024, In Planung<br/>Bauherrschaft: Privat<br/><br/>
-                        2405 - SOCIAL LOFT<br/>Wohnungsbau mit Re-Use Konzept in Basel, Schweiz, 2024, Wettbewerb<br/>mit Alois Merkt und Zoé Rüttimann<br/>Bauherrschaft: SBB Immobilien<br/><br/>
-                        2404 - AUFSTOCKEN UND ERGÄNZEN<br/>Wohnungsbau in Zürich, Schweiz, 2024, Wettbewerb<br/>Landschaftsarchitektur: Lars Ruge<br/>Bauherrschaft: Baugenossenschaft Waidberg BGW<br/><br/>
-                        2403 - DER HOLLÄNDER<br/>Musikschule und Vereinszentrum in Zug, Schweiz, 2024, Wettbewerb<br/>mit Dalla Santa Birkeland Arkitekten<br/>Landschaftsarchitektur: Lauro Nächt<br/>Bauleitung: Bauseits Partner AG<br/>Bauingenieur: Synaxis AG<br/>HLKS: 3-Plan AG<br/>Brandschutz: Zostera Brandschutzplanung GmbH<br/>Bauherrschaft: Einwohnergemeinde Cham<br/><br/>
-                        2402 - RINGELREIHE<br/>Doppelkindergarten in Wil, St. Gallen, Schweiz, 2024, Wettbewerb<br/>mit Atikollektiv<br/>Landschaftsarchitektur: Simone Pietscher<br/>Bauingenieur: Saman Hekmati<br/>Bauherrschaft: Stadt Wil<br/><br/>
-                        2401 - WANDLER<br/>Stadthaus in Romanshorn, Schweiz, 2024, Wettbewerb<br/>Landschaftsarchitektur: Beatrice Kiser<br/>Bauherrschaft: Stadt Romanshorn<br/><br/>
-                        2202 - ÄLVSALA<br/>Renovation und Erweiterung eines Ferienhauses in Värmdö, Schweden, 2022, Studie<br/>Bauherrschaft: Privat<br/><br/>
-                        2201 - BJÖRKVIK<br/>Umbau und Erweiterung eines Ferienhauses in Värmdö, Schweden, 2022, Studie<br/>Bauherrschaft: Privat<br/><br/>
-                        2101 - HAUS FÜR ZWEI BRÜDER<br/>Ferienhaus in Dalarna, Schweden, 2021, Realisiert<br/>Bauherrschaft: Privat<br/>
-                    </div>
-                    <div class="lang-sv" style="display:none;">
-                        2504 - HUSA<br/>Renovering av ett timmerhus i Hälsingland, Sverige, 2025, studie<br/>Beställare: Privat<br/><br/>
-                        2503 - BORTSÄNKES MOT NEDMONTERING<br/>Ansökan till Einar Mattson-stipendiet, ArkDes, Stockholm, Sverige, 2025, ansökan<br/><a href="https://www.contemfurniture.com/">med stöd av CONTEM</a><br/><br/>
-                        2502 - GOTTSUNDA SKOG<br/>600 bostäder, förskola och ombyggnad av Gottsunda Centrum i Uppsala, Sverige, 2025, tävling (sista omgången)<br/>Landskapsarkitektur: Studio Era<br/>Beställare: Uppsala kommun / Hemmaplan<br/><br/>
-                        2406 - FH SAMUN<br/>Renovering av ett fritidshus i Falera, Schweiz, 2024, i planering<br/>Beställare: Privat<br/><br/>
-                        2405 - SOCIAL LOFT<br/>Bostadsbyggande med re-use-koncept i Basel, Schweiz, 2024, tävling<br/>med Alois Merkt och Zoé Rüttimann<br/>Beställare: SBB Immobilien<br/><br/>
-                        2404 - PÅBYGGNAD OCH KOMPLETTERING<br/>Bostadsbyggande i Zürich, Schweiz, 2024, tävling<br/>Landskapsarkitektur: Lars Ruge<br/>Beställare: Byggnadsföreningen Waidberg BGW<br/><br/>
-                        2403 - DER HOLLÄNDER<br/>Musikskola och föreningscentrum i Zug, Schweiz, 2024, tävling<br/>med Dalla Santa Birkeland Arkitekter<br/>Landskapsarkitektur: Lauro Nächt<br/>Byggledning: Bauseits Partner AG<br/>Byggingenjör: Synaxis AG<br/>HLKS/VVS: 3-Plan AG<br/>Brandskydd: Zostera Brandschutzplanung GmbH<br/>Beställare: Einwohnergemeinde Cham<br/><br/>
-                        2402 - RINGELREIHE<br/>Dubbel förskola i Wil, St. Gallen, Schweiz, 2024, tävling<br/>med Atikollektiv<br/>Landskapsarkitektur: Simone Pietscher<br/>Byggingenjör: Saman Hekmati<br/>Beställare: Stadt Wil<br/><br/>
-                        2401 - WANDLER<br/>Stadshus i Romanshorn, Schweiz, 2024, tävling<br/>Landskapsarkitektur: Beatrice Kiser<br/>Beställare: Stadt Romanshorn<br/><br/>
-                        2202 - ÄLVSALA<br/>Renovering och utbyggnad av ett fritidshus i Värmdö, Sverige, 2022, studie<br/>Beställare: Privat<br/><br/>
-                        2201 - BJÖRKVIK<br/>Om- och tillbyggnad av ett fritidshus i Värmdö, Sverige, 2022, studie<br/>Beställare: Privat<br/><br/>
-                        2101 - HUS FÖR TVÅ BRÖDER<br/>Fritidshus i Dalarna, Sverige, 2021, färdigställt<br/>Beställare: Privat<br/>
-                    </div>
-                </div>
+            <div class="lang-sv-block" style="display:none;">
+                LINYER är ett arkitektkontor, grundat och drivet sedan 2024, verksamt i Stockholm och Zürich. 
+                <br/><br/>
+                I vårt arbete lägger vi fokus på vidarebyggnad, återanvändning, och om nytt – då i biogena material såsom trä. Varje projekt börjar med en grundlig genomgång av de lokala förutsättningarna och klientens önskemål. Våra intressen omfattar en bred palett; förslag för offentliga byggnader, konstruktiva detaljlösningar, stadsplaneringsidéer, undervisning och skrivande.
+                <br/><br/>
+                Emma Lindén (f. 1994, Stockholm SE) är arkitekt SAR/MSA. Under sina studier vid Kungliga Tekniska Högskolan i Stockholm genomförde hon ett utbytesår vid ETHZ. Hon har arbetat på General Architecture, Lütjens Padmanabhan, Maich Swift och Boltshauser Architekten.
+                <br/><br/>
+                Lowis Gujer (f. 1995, Zürich CH) är arkitekt MSc Arch. ETHZ. Han avslutade sina studier vid ETHZ 2023. Efter erfarenheter från arkitektkontor i Zürich, Stockholm och London arbetar han sedan början av 2024 vid Chair of Architectural Behaviorology och undervisar i design för Prof. Momoyo Kaijima.
+                <br/><br/>
+                contact@linyer.info<br/>
+                +41 76 220 62 84<br/>
+                +46 76 341 09 01<br/>
+                Hofwiesenstrasse 191<br/>
+                8057 Zürich<br/>
+                UID: CHE-340.689.567<br/><br/>
+                
+                <strong>UNDERVISNING</strong><br/><br/>
+                <a href="https://kaijima.arch.ethz.ch/news/call-for-entries-japan-studio-iii-seminar-week-25hs-feldis-veulden/">JAPAN STUDIO 3 "STONE, WOOD, SOIL"</a><br/>Undervisningsassistent för masterkursen i design vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
+                <a href="https://kaijima.arch.ethz.ch/news/call-for-summer-workshop-bamboo-greenhouse/">BAMBUS GEWÄCHSHAUS</a><br/>Undervisningsassistent för workshopen i masterprogrammet vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
+                <a href="https://kaijima.arch.ethz.ch/news/call-for-focus-work-climate-kitchen/">KLIMATKÖKET</a><br/>Undervisningsassistent för workshop i masterprogrammet vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
+                <a href="https://systems.arch.ethz.ch/studios-workshops/design-for-climate-202">DESIGN FOR CLIMATE</a><br/>Undervisningsassistent för masterkursen i design vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
+                <a href="https://www.otelfingen.ch/gemeinde/aktuelles/projekte/care-hubs-neue-orte-der-begegnung-fuer-otelfingen.html/1245">JAPAN STUDIO 2 "CARE HUBS"</a><br/>Undervisningsassistent för masterkursen i design vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
+                <a href="https://kaijima.arch.ethz.ch/academic_year/fs24/?filter=1">PUBLIC SPACE BEHAVIOROLOGY</a><br/>Undervisningsassistent för designkursen i år 2 vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/><br/>
 
-                <!-- Spalte 2: Lehre & Publikationen -->
-                <div class="right-column-teaching-pubs">
-                    <span class="lang-de">LEHRE</span>
-                    <span class="lang-sv" style="display:none;">UNDERVISNING</span>
-                    <br/><br/>
-                    <div class="lang-de">
-                        <a href="https://kaijima.arch.ethz.ch/news/call-for-entries-japan-studio-iii-seminar-week-25hs-feldis-veulden/">JAPAN STUDIO 3 "STONE, WOOD, SOIL"</a><br/>Lehrassistent für den Entwurfskurs im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
-                        <a href="https://kaijima.arch.ethz.ch/news/call-for-summer-workshop-bamboo-greenhouse/">BAMBUS GEWÄCHSHAUS</a><br/>Lehrassistent für den Workshop im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
-                        <a href="https://kaijima.arch.ethz.ch/news/call-for-focus-work-climate-kitchen/">KLIMA KÜCHE</a><br/>Lehrassistent für den Workshop im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
-                        <a href="https://systems.arch.ethz.ch/studios-workshops/design-for-climate-202">DESIGN FOR CLIMATE</a><br/>Lehrassistent für den Entwurfskurs im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
-                        <a href="https://www.otelfingen.ch/gemeinde/aktuelles/projekte/care-hubs-neue-orte-der-begegnung-fuer-otelfingen.html/1245">JAPAN STUDIO 2 "CARE HUBS"</a><br/>Lehrassistent für den Entwurfskurs im Master am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
-                        <a href="https://kaijima.arch.ethz.ch/academic_year/fs24/?filter=1">PUBLIC SPACE BEHAVIOROLOGY</a><br/>Lehrassistent für den Entwurfskurs im zweiten Jahr am Lehrstuhl für Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
-                    </div>
-                    <div class="lang-sv" style="display:none;">
-                        <a href="https://kaijima.arch.ethz.ch/news/call-for-entries-japan-studio-iii-seminar-week-25hs-feldis-veulden/">JAPAN STUDIO 3 "STONE, WOOD, SOIL"</a><br/>Undervisningsassistent för masterkursen i design vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
-                        <a href="https://kaijima.arch.ethz.ch/news/call-for-summer-workshop-bamboo-greenhouse/">BAMBUS GEWÄCHSHAUS</a><br/>Undervisningsassistent för workshopen i masterprogrammet vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
-                        <a href="https://kaijima.arch.ethz.ch/news/call-for-focus-work-climate-kitchen/">KLIMATKÖKET</a><br/>Undervisningsassistent för workshop i masterprogrammet vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
-                        <a href="https://systems.arch.ethz.ch/studios-workshops/design-for-climate-202">DESIGN FOR CLIMATE</a><br/>Undervisningsassistent för masterkursen i design vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
-                        <a href="https://www.otelfingen.ch/gemeinde/aktuelles/projekte/care-hubs-neue-orte-der-begegnung-fuer-otelfingen.html/1245">JAPAN STUDIO 2 "CARE HUBS"</a><br/>Undervisningsassistent för masterkursen i design vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
-                        <a href="https://kaijima.arch.ethz.ch/academic_year/fs24/?filter=1">PUBLIC SPACE BEHAVIOROLOGY</a><br/>Undervisningsassistent för designkursen i år 2 vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, Zürich, Schweiz, 2024<br/><br/>
-                    </div>
-
-                    <span class="lang-de">PUBLIKATIONEN</span>
-                    <span class="lang-sv" style="display:none;">PUBLIKATIONER</span>
-                    <br/><br/>
-                    <div class="lang-de">
-                        BERGDÖRFER UND IHRE MÖGLICHE ENTWICKLUNG<br/>Interview in der Lokalzeitung "Pöschtli" über das Japan Studio 3 "STONE, WOOD, SOIL" im Rahmen des Lehrprojekts Domleschg, Schweiz, 2025<br/>mit Stefan Kurath, Thomas Weiss, Michael Wagner, Oscar Buscon, Kees Christiaanse<br/><br/>
-                        <a href="https://www.hochparterre.ch/nachrichten/planung-staedtebau/die-saeulenhalle-endlich-ein-zentrum-fuer-zuerich-west">2407 - DIE SÄULENHALLE: ENDLICH EIN ZENTRUM FÜR ZÜRICH WEST!</a><br/>Themenheft des Architekturmagazins Hochparterre, Zürich, Schweiz, 2025<br/>Arbeitsgruppe: Martin Hofer (Architekt und Immobilienfachmann, Leiter und Konzeptverfasser), Köbi Gantenbein (Soziologem, Leiter und Sekretär), Dominique Ghiggi (Landschaftsarchitektin, Ghiggi Paesaggi Landschaft und Städtebau, Zürich), Christoph Gysi (Präsident der "Vereinigung Industrict Zürich West, aus Industrie wird Kultur", Zürich), Christoph Kellenberger (Architekt und Gründungspartner Büro OOS, Zürich), Markus Knauss (Co-Geschäftsleiter des Verkehrs-Clubs der Schweiz und Gemeinderat), Maresa Kuhn (Stadt- und Projektentwicklerin im Büro Belebung & Begegnung, Zürich), Jordi Riegg (Raum- und Verkehrsplaner im Büro Rombo, Zürich), Alain Thierstein (Stadtentwickler, Delegierter Hamasil Stiftung), Hamasil Stiftung (Auftraggeberin, Finanzierung)<br/><a href="https://nandovonarb.ch/">Illustrationen mit Nando von Arb</a><br/><br/>
-                        <a href="https://www.furttaler.ch/aktuelles/detail?tx_news_pi1%5Baction%5D=detail&tx_news_pi1%5Bcontroller%5D=News&tx_news_pi1%5Bnews%5D=250118&cHash=5c51538c0a846e16fec72b9e55e24a98">"DAS INTERESSE DER OTELFINGER FREUT UNS"</a><br/>Interview in der Lokalzeitung "Furttaler" über das Japan Studio 2 "Care Hubs", Schweiz, 2024<br/><br/>
-                        <a href="https://www.hochparterre.ch/campus/eine-stadt-ohne-schlachthof">2302 EINE STADT OHNE SCHLACHTHOF?</a><br/>Artikel für die Campusrubrik des Architekturmagazins Hochparterre, Zürich, Schweiz, 2024<br/><br/>
-                        <a href="https://trans.ethz.ch/issue/time">2301 - TRANS MAGAZIN #42 TIME</a><br/>Redaktion des Architekturmagazins trans des Architekturdepartements der ETH, Zürich, Schweiz, 2023<br/>Co-Redaktion: Tatjana Bergmeister, Carolina Catarino Gomes, Zoé Rüttimann<br/><br/>
-                        <a href="https://trans.ethz.ch/issue/fire-1">2203 - TRANS MAGAZIN #41 FIRE</a><br/>Redaktion des Architekturmagazins trans des Architekturdepartements der ETH, Zürich, Schweiz, 2023<br/>Co-Redaktion: Sebastian Baumann, Tatjana Bergmeister, Sophia Garner<br/><br/>
-                        <a href="https://doi.org/10.5169/seals-981501">2102 - WORK IS OVER</a><br/>Artikel für die 38. Ausgabe des Architekturmagazins trans "REPRODUCTION" des Architekturdepartements der ETH, Zürich, Schweiz, 2021<br/>
-                    </div>
-                    <div class="lang-sv" style="display:none;">
-                        BERGDÖRFER OCH DESS MÖJLIGA UTVECKLING<br/>Intervju i den lokala tidningen "Pöschtli" om Japan Studio 3 "STONE, WOOD, SOIL" inom ramen för undervisningsprojektet Domleschg, Schweiz, 2025<br/>med Stefan Kurath, Thomas Weiss, Michael Wagner, Oscar Buscon, Kees Christiaanse<br/><br/>
-                        <a href="https://www.hochparterre.ch/nachrichten/planung-staedtebau/die-saeulenhalle-endlich-ein-zentrum-fuer-zuerich-west">2407 - DIE SÄULENHALLE: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICHWEST!</a><br/>Temanummer av arkitekturtidskriften Hochparterre, Zürich, Schweiz, 2025<br/>Arbetsgrupp: Martin Hofer (arkitekt och fastighetsexpert, ledare och konceptförfattare), Köbi Gantenbein (sociolog, ledare och sekreterare), Dominique Ghiggi (landskapsarkitekt, Ghiggi Paesaggi, Zürich), Christoph Gysi (ordförande för "Vereinigung Industrict Zürich West, från industri till kultur", Zürich), Christoph Kellenberger (arkitekt och grundare av kontoret OOS, Zürich), Markus Knauss (medverkande direktör för Verkehrs-Club der Schweiz och kommunalpolitiker), Maresa Kuhn (stads- och projektutvecklare, Belebung & Begegnung, Zürich), Jordi Riegg (rum- och trafikplanerare, Rombo, Zürich), Alain Thierstein (stadsutvecklare, Hamasil-stiftelsen), Hamasil-stiftelsen (uppdragsgivare, finansiering)<br/><a href="https://nandovonarb.ch/">Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb</a><br/><br/>
-                        <a href="https://www.furttaler.ch/aktuelles/detail?tx_news_pi1%5Baction%5D=detail&tx_news_pi1%5Bcontroller%5D=News&tx_news_pi1%5Bnews%5D=250118&cHash=5c51538c0a846e16fec72b9e55e24a98">"DAS INTERESSE DER OTELFINGER FREUT UNS"</a><br/>Intervju i lokalpressen "Furttaler" om Japan Studio 2 "Care Hubs", Schweiz, 2024<br/><br/>
-                        <a href="https://www.hochparterre.ch/campus/eine-stadt-ohne-schlachthof">2302 - Eine Stadt ohne Schlachthof?</a><br/>Artikel för campussektionen i arkitekturtidskriften Hochparterre, Zürich, Schweiz, 2024<br/><br/>
-                        <a href="https://trans.ethz.ch/issue/time">2301 - TRANS MAGAZIN #42 TIME</a><br/>Redaktion för arkitekturtidskriften trans vid arkitekturdepartementet, ETH, Zürich, Schweiz, 2023<br/>Co-redaktörer: Tatjana Bergmeister, Carolina Catarino Gomes, Zoé Rüttimann<br/><br/>
-                        <a href="https://trans.ethz.ch/issue/fire-1">2203 - TRANS MAGAZIN #41 FIRE</a><br/>Redaktion för arkitekturtidskriften trans vid arkitekturdepartementet, ETH, Zürich, Schweiz, 2023<br/>Co-redaktörer: Sebastian Baumann, Tatjana Bergmeister, Sophia Garner<br/><br/>
-                        <a href="https://doi.org/10.5169/seals-981501">2102 - WORK IS OVER</a><br/>Artikel för den 38:e utgåvan av trans "REPRODUCTION" vid arkitekturdepartementet, ETH, Zürich, Schweiz, 2021<br/>
-                    </div>
-                </div>
+                <strong>PUBLIKATIONER</strong><br/><br/>
+                BERGDÖRFER OCH DESS MÖJLIGA UTVECKLING<br/>Intervju i den lokala tidningen "Pöschtli" om Japan Studio 3 "STONE, WOOD, SOIL" inom ramen för undervisningsprojektet Domleschg, Schweiz, 2025<br/>med Stefan Kurath, Thomas Weiss, Michael Wagner, Oscar Buscon, Kees Christiaanse<br/><br/>
+                <a href="https://www.hochparterre.ch/nachrichten/planung-staedtebau/die-saeulenhalle-endlich-ein-zentrum-fuer-zuerich-west">2407 - DIE SÄULENHALLE: ÄNTLIGEN ETT CENTRUM FÖR ZÜRICHWEST!</a><br/>Temanummer av arkitekturtidskriften Hochparterre, Zürich, Schweiz, 2025<br/>Arbetsgrupp: Martin Hofer (arkitekt och fastighetsexpert, ledare och konceptförfattare), Köbi Gantenbein (sociolog, ledare och sekreterare), Dominique Ghiggi (landskapsarkitekt, Ghiggi Paesaggi, Zürich), Christoph Gysi (ordförande för "Vereinigung Industrict Zürich West, från industri till kultur", Zürich), Christoph Kellenberger (arkitekt och grundare av kontoret OOS, Zürich), Markus Knauss (medverkande direktör för Verkehrs-Club der Schweiz och kommunalpolitiker), Maresa Kuhn (stads- och projektutvecklare, Belebung & Begegnung, Zürich), Jordi Riegg (rum- och trafikplanerare, Rombo, Zürich), Alain Thierstein (stadsutvecklare, Hamasil-stiftelsen), Hamasil-stiftelsen (uppdragsgivare, finansiering)<br/><a href="https://nandovonarb.ch/">Illustrationer för temanumret i juni 2025 av Hochparterre med Nando von Arb</a><br/><br/>
+                <a href="https://www.furttaler.ch/aktuelles/detail?tx_news_pi1%5Baction%5D=detail&tx_news_pi1%5Bcontroller%5D=News&tx_news_pi1%5Bnews%5D=250118&cHash=5c51538c0a846e16fec72b9e55e24a98">"DAS INTERESSE DER OTELFINGER FREUT UNS"</a><br/>Intervju i lokalpressen "Furttaler" om Japan Studio 2 "Care Hubs", Schweiz, 2024<br/><br/>
+                <a href="https://www.hochparterre.ch/campus/eine-stadt-ohne-schlachthof">2302 - Eine Stadt ohne Schlachthof?</a><br/>Artikel för campussektionen i arkitekturtidskriften Hochparterre, Zürich, Schweiz, 2024<br/><br/>
+                <a href="https://trans.ethz.ch/issue/time">2301 - TRANS MAGAZIN #42 TIME</a><br/>Redaktion för arkitekturtidskriften trans vid arkitekturdepartementet, ETH, Zürich, Schweiz, 2023<br/>Co-redaktörer: Tatjana Bergmeister, Carolina Catarino Gomes, Zoé Rüttimann<br/><br/>
+                <a href="https://trans.ethz.ch/issue/fire-1">2203 - TRANS MAGAZIN #41 FIRE</a><br/>Redaktion för arkitekturtidskriften trans vid arkitekturdepartementet, ETH, Zürich, Schweiz, 2023<br/>Co-redaktörer: Sebastian Baumann, Tatjana Bergmeister, Sophia Garner<br/><br/>
+                <a href="https://doi.org/10.5169/seals-981501">2102 - WORK IS OVER</a><br/>Artikel för den 38:e utgåvan av trans "REPRODUCTION" vid arkitekturdepartementet, ETH, Zürich, Schweiz, 2021<br/>
             </div>
         </div>
+        
+        <!-- Rechte Spalte: Interaktives Bild -->
+        <div class="contact-right"></div>
     </div>
 </body>
 </html>

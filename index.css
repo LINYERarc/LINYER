@@ -22,7 +22,7 @@ body::-webkit-scrollbar {
 }
 
 body {
-    background-color: #fff;
+    background-color: #e6e6e6; /* 10% Grau */
     color: rgb(0, 0, 0);
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
     font-size: 16px;
@@ -37,23 +37,25 @@ body {
     box-sizing: border-box;
 }
 
+/* Links im Text generell unterstrichen */
 a {
-    text-decoration: none;
+    text-decoration: underline;
     color: rgb(0, 0, 0);
 }
 a:hover {
-    text-decoration: none;
+    text-decoration: underline;
     color: red;
 }
 
+/* Tab / Navigation oben (Links NICHT unterstrichen) */
 .linyer-tab {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    background: #fff;
+    background: #e6e6e6; /* 10% Grau */
     padding: 10px 0px;
-    z-index: 10005; /* Höher als das Overlay, damit es stets sichtbar bleibt */
+    z-index: 10005;
     box-shadow: none;
     display: flex;
     justify-content: space-between;
@@ -79,6 +81,7 @@ a:hover {
      font-size: 1rem !important;
      font-family: 'TXT', Arial, Helvetica, sans-serif !important;
      color: red !important;
+     text-decoration: none !important;
 }
 .linyer-tab-right {
     font-size: 1rem;
@@ -88,8 +91,11 @@ a:hover {
 .linyer-tab-link {
     font-size: 1rem;
     color: #000;
-    text-decoration: none;
+    text-decoration: none !important;
     font-family: 'TXT', Arial, Helvetica, sans-serif;
+}
+.linyer-tab-link:hover {
+    text-decoration: none !important;
 }
 .active-lang {
     color: red !important;
@@ -122,10 +128,10 @@ a:hover {
     width: 100%;
     aspect-ratio: 4/3;
     height: auto;
-    background: #fff;
+    background: #e6e6e6; /* 10% Grau */
     box-sizing: border-box;
     overflow: hidden;
-    cursor: pointer;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 5v14M5 12h14'/></svg>") 10 10, pointer;
 }
 .hover-img {
     width: 100%;
@@ -144,7 +150,7 @@ a:hover {
     align-items: flex-end;
     justify-content: flex-start;
     color: #000000;
-    background: rgb(255, 255, 255);
+    background: #e6e6e6; /* 10% Grau */
     font-size: 1rem;
     opacity: 0;
     transition: opacity 0s;
@@ -175,18 +181,18 @@ a:hover {
     opacity: 1;
 }
 
-/* --- Detail-Ansicht (Overlay) --- */
+/* --- Detail-Ansicht (Overlay & Kontakt-Rechts) --- */
 .fullscreen-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     width: 100vw;
     height: 100vh;
-    background: #fff;
+    background: #e6e6e6; /* 10% Grau */
     z-index: 9999;
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
-    padding: 80px 40px 40px 40px; /* Erhöhtes Top-Padding, damit der Inhalt unter dem Tab beginnt */
+    padding: 80px 40px 40px 40px;
     gap: 40px;
 }
 
@@ -208,36 +214,34 @@ a:hover {
     flex: 2;
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    overflow-y: auto;
-    height: 100%;
-    padding-right: 10px;
-    box-sizing: border-box;
+    justify-content: center;
     align-items: center;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-.fullscreen-img-side::-webkit-scrollbar {
-    display: none;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .fullscreen-single-img {
-    width: 100%;
-    max-height: 85vh;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
     display: block;
     background: transparent;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 5v14M19 12l-7 7-7-7'/></svg>") 12 12, pointer;
 }
 
 .fullscreen-close-btn {
     position: absolute;
-    top: 68px; /* Unterhalb des Tabs positioniert */
+    top: 68px;
     right: 40px;
     color: #000;
     font-size: 2rem;
     font-family: 'TXT', Arial, Helvetica, sans-serif;
     cursor: pointer;
-    z-index: 10006; /* Über dem Tab und Overlay */
+    z-index: 10006;
     user-select: none;
     line-height: 1;
     transform: rotate(45deg);
@@ -277,27 +281,13 @@ body.contact-page {
 
 .contact-right {
     flex: 2;
-    overflow-y: auto;
-    padding-right: 10px;
-    text-align: left;
-}
-
-.contact-right img {
-    width: 100%;
-    height: auto;
-    display: block;
-    margin-bottom: 20px;
-    object-fit: cover;
-}
-
-.right-columns-wrapper {
     display: flex;
-    gap: 30px;
-}
-
-.right-column-projects,
-.right-column-teaching-pubs {
-    flex: 1;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* --- Mobile / Kleine Bildschirme (max. 800px) --- */
@@ -337,7 +327,7 @@ body.contact-page {
         right: 20px;
     }
     .contact-container {
-        flex-direction: column-reverse;
+        flex-direction: column;
         overflow: visible;
         padding: 20px 0 0 0;
         height: auto;
@@ -345,20 +335,26 @@ body.contact-page {
     .contact-left, .contact-right {
         overflow-y: visible;
         height: auto;
+        min-height: 300px;
     }
-    .right-columns-wrapper {
-        flex-direction: column;
-    }
+    
+    /* --- Index-Raster auf Mobile anpassen --- */
     .img-columns {
+        display: flex;
         flex-direction: column;
         gap: 16px;
         width: 100%;
         max-width: 100%;
         margin: 0;
     }
+    /* Spalten-Container auf Mobile auflösen, damit die Reihenfolge greift */
+    .img-col {
+        display: contents;
+    }
     .img-hover-container {
         width: 100%;
         max-width: 100%;
         min-width: 0;
     }
+}
 }
