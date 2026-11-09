@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <title id="page-title">LINYER Architektur</title>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta name="description" content="LINYER ist ein Architekturbüro in Stockholm und Zürich, betrieben von Emma Lindén und Lowis Gujer." />
     <link rel="stylesheet" href="index.css">
     <style>
         /* Spezifische Anpassung für Mobile: Text zuerst, Bilder danach */
@@ -34,7 +35,7 @@
             const savedLang = localStorage.getItem('linyer_lang') || 'de';
             switchLang(savedLang);
 
-            // Kontaktbilder-Interaktion (Scrollen schaltet immer vorwärts)
+            // Kontaktbilder-Interaktion (Scrollen schaltet immer vorwärts auf Desktop, untereinander auf Mobile)
             const contactImages = [
                 { src: 'img/CONTACT_Lowis.gif', alt: 'Lowis Gujer' },
                 { src: 'img/CONTACT_Emma.gif', alt: 'Emma Lindén' }
@@ -43,57 +44,76 @@
 
             const rightSide = document.querySelector('.contact-right');
             if (rightSide) {
-                rightSide.innerHTML = '';
-                rightSide.style.display = 'flex';
-                rightSide.style.flexDirection = 'column';
-                rightSide.style.justifyContent = 'center';
-                rightSide.style.alignItems = 'center';
-                rightSide.style.overflow = 'hidden';
-                rightSide.style.height = '100%';
+                if (window.innerWidth <= 800) {
+                    // Auf Mobile: Beide Bilder untereinander zum normalen Durchscrollen
+                    rightSide.innerHTML = '';
+                    rightSide.style.display = 'flex';
+                    rightSide.style.flexDirection = 'column';
+                    rightSide.style.gap = '20px';
+                    rightSide.style.overflowY = 'visible';
+                    rightSide.style.height = 'auto';
 
-                const singleImg = document.createElement('img');
-                singleImg.className = 'fullscreen-single-img';
-                
-                function updateContactImage() {
-                    const item = contactImages[currentContactImgIndex];
-                    singleImg.src = item.src;
-                    singleImg.alt = item.alt;
-                }
-                updateContactImage();
-                rightSide.appendChild(singleImg);
+                    contactImages.forEach(item => {
+                        const singleImg = document.createElement('img');
+                        singleImg.src = item.src;
+                        singleImg.alt = item.alt;
+                        singleImg.style.width = '100%';
+                        singleImg.style.height = 'auto';
+                        singleImg.style.objectFit = 'contain';
+                        rightSide.appendChild(singleImg);
+                    });
+                } else {
+                    // Auf Desktop: Interaktives Einzelbild mit Klick / Mausrad / Touch
+                    rightSide.innerHTML = '';
+                    rightSide.style.display = 'flex';
+                    rightSide.style.flexDirection = 'column';
+                    rightSide.style.justifyContent = 'center';
+                    rightSide.style.alignItems = 'center';
+                    rightSide.style.overflow = 'hidden';
+                    rightSide.style.height = '100%';
 
-                singleImg.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
+                    const singleImg = document.createElement('img');
+                    singleImg.className = 'fullscreen-single-img';
+                    
+                    function updateContactImage() {
+                        const item = contactImages[currentContactImgIndex];
+                        singleImg.src = item.src;
+                        singleImg.alt = item.alt;
+                    }
                     updateContactImage();
-                });
+                    rightSide.appendChild(singleImg);
 
-// Mausrad schaltet je nach Scroll-Richtung vor oder zurück
-rightSide.addEventListener('wheel', function(e) {
-    e.preventDefault();
-    if (e.deltaY > 0) {
-        // Nach unten scrollen -> Nächstes Bild
-        currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
-    } else {
-        // Nach oben scrollen -> Vorheriges Bild
-        currentContactImgIndex = (currentContactImgIndex - 1 + contactImages.length) % contactImages.length;
-    }
-    updateContactImage();
-}, { passive: false });
-
-                let touchStartX = 0;
-                rightSide.addEventListener('touchstart', function(e) {
-                    touchStartX = e.touches[0].clientX;
-                }, { passive: true });
-
-                rightSide.addEventListener('touchend', function(e) {
-                    let touchEndX = e.changedTouches[0].clientX;
-                    let diff = touchStartX - touchEndX;
-                    if (Math.abs(diff) > 50) {
+                    singleImg.addEventListener('click', function(e) {
+                        e.stopPropagation();
                         currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
                         updateContactImage();
-                    }
-                }, { passive: true });
+                    });
+
+                    // Mausrad schaltet je nach Scroll-Richtung vor oder zurück
+                    rightSide.addEventListener('wheel', function(e) {
+                        e.preventDefault();
+                        if (e.deltaY > 0) {
+                            currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
+                        } else {
+                            currentContactImgIndex = (currentContactImgIndex - 1 + contactImages.length) % contactImages.length;
+                        }
+                        updateContactImage();
+                    }, { passive: false });
+
+                    let touchStartX = 0;
+                    rightSide.addEventListener('touchstart', function(e) {
+                        touchStartX = e.touches[0].clientX;
+                    }, { passive: true });
+
+                    rightSide.addEventListener('touchend', function(e) {
+                        let touchEndX = e.changedTouches[0].clientX;
+                        let diff = touchStartX - touchEndX;
+                        if (Math.abs(diff) > 50) {
+                            currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
+                            updateContactImage();
+                        }
+                    }, { passive: true });
+                }
             }
         });
     </script>
@@ -192,7 +212,7 @@ rightSide.addEventListener('wheel', function(e) {
             </div>
         </div>
         
-        <!-- Rechte Spalte: Interaktives Bild -->
+        <!-- Rechte Spalte: Interaktive/Scrollbare Bilder -->
         <div class="contact-right"></div>
     </div>
 </body>

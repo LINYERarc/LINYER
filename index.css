@@ -22,7 +22,7 @@ body::-webkit-scrollbar {
 }
 
 body {
-    background-color: #e6e6e6; /* 10% Grau */
+    background-color: #ffffff; /* 100% Weiss */
     color: rgb(0, 0, 0);
     font-family: 'Avenir', Arial, Helvetica, sans-serif;
     font-size: 16px;
@@ -47,15 +47,15 @@ a:hover {
     color: red;
 }
 
-/* Tab / Navigation oben (Links NICHT unterstrichen) */
+/* Tab / Navigation oben (Links NICHT unterstrichen) - z-index erhöht, damit sie immer im Vordergrund bleibt */
 .linyer-tab {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    background: #e6e6e6; /* 10% Grau */
+    background: #ffffff; /* 100% Weiss */
     padding: 10px 0px;
-    z-index: 10005;
+    z-index: 10030;
     box-shadow: none;
     display: flex;
     justify-content: space-between;
@@ -128,7 +128,7 @@ a:hover {
     width: 100%;
     aspect-ratio: 4/3;
     height: auto;
-    background: #e6e6e6; /* 10% Grau */
+    background: #ffffff; /* 100% Weiss */
     box-sizing: border-box;
     overflow: hidden;
     cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 5v14M5 12h14'/></svg>") 10 10, pointer;
@@ -150,7 +150,7 @@ a:hover {
     align-items: flex-end;
     justify-content: flex-start;
     color: #000000;
-    background: #e6e6e6; /* 10% Grau */
+    background: #ffffff; /* 100% Weiss */
     font-size: 1rem;
     opacity: 0;
     transition: opacity 0s;
@@ -187,8 +187,8 @@ a:hover {
     top: 0; left: 0; right: 0; bottom: 0;
     width: 100vw;
     height: 100vh;
-    background: #e6e6e6; /* 10% Grau */
-    z-index: 9999;
+    background: #ffffff; /* 100% Weiss */
+    z-index: 10020;
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
@@ -241,7 +241,7 @@ a:hover {
     font-size: 2rem;
     font-family: 'TXT', Arial, Helvetica, sans-serif;
     cursor: pointer;
-    z-index: 10006;
+    z-index: 10035; /* Höher als die Navigation, damit der Schliessen-Button klickbar bleibt */
     user-select: none;
     line-height: 1;
     transform: rotate(45deg);
@@ -319,12 +319,13 @@ body.contact-page {
     .fullscreen-overlay {
         flex-direction: column;
         padding: 20px;
-        padding-top: 60px;
+        padding-top: 75px; /* Genug Abstand, damit der Inhalt unter der festen Tab-Leiste beginnt */
         overflow-y: auto;
+        height: 100vh;
     }
     .fullscreen-close-btn {
-        top: 55px;
-        right: 20px;
+        top: 15px; /* Passt sich perfekt neben die mobile Tab-Leiste an */
+        right: 15px;
     }
     .contact-container {
         flex-direction: column;
@@ -335,7 +336,19 @@ body.contact-page {
     .contact-left, .contact-right {
         overflow-y: visible;
         height: auto;
-        min-height: 300px;
+        min-height: auto;
+    }
+    .fullscreen-text-side {
+        flex: none;
+        width: 100%;
+        height: auto;
+        overflow-y: visible;
+    }
+    .fullscreen-img-side {
+        flex: none;
+        width: 100%;
+        height: auto;
+        overflow: visible;
     }
     
     /* --- Index-Raster auf Mobile anpassen --- */
@@ -347,7 +360,6 @@ body.contact-page {
         max-width: 100%;
         margin: 0;
     }
-    /* Spalten-Container auf Mobile auflösen, damit die Reihenfolge greift */
     .img-col {
         display: contents;
     }
@@ -356,5 +368,4 @@ body.contact-page {
         max-width: 100%;
         min-width: 0;
     }
-}
 }

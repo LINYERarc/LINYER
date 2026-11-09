@@ -4,6 +4,7 @@
     <meta charset="utf-8"/>
     <title id="page-title">LINYER Architektur</title>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta name="description" content="LINYER ist ein Architekturbüro in Stockholm und Zürich, betrieben von Emma Lindén und Lowis Gujer." />
     <link rel="stylesheet" href="index.css">
     <script>
         function switchLang(lang) {
@@ -75,7 +76,7 @@
                 if (filename.includes('2502')) return '2502';
                 if (filename.includes('2602')) return '2602';
                 if (filename.includes('2406')) return '2406';
-                if (filename.includes('2605')) return '2605';
+                if (filename.includes('2506')) return '2506';
                 const match = filename.match(/INDEX_(\d+)/i);
                 return match ? match[1] : null;
             }
@@ -256,7 +257,7 @@
                                 En tydlig planlösning definierar entré, gemensamma och privata ytor samt uterum. Vindsvåningen fångar den framträdande takformen med takkupor från den lokala byggnadskulturen och säkerställer att alla rum har rullstolsanpassad tillgång till fasaden.
                             </div>
                         `;
-                    } else if (group === '2605') {
+                    } else if (group === '2506') {
                         textSide.innerHTML = `
                             <div class="lang-de-block">
                                 2506 ZWISCHEN HAUS UND DORF<br/>
@@ -313,51 +314,69 @@
                     const imgSide = document.createElement('div');
                     imgSide.className = 'fullscreen-img-side';
                     
-                    const singleImg = document.createElement('img');
-                    singleImg.className = 'fullscreen-single-img';
-                    
-                    function updateActiveImage() {
-                        const item = relatedImages[currentImgIndex];
-                        singleImg.src = item.img.src;
-                        singleImg.alt = item.img.alt;
-                    }
-                    updateActiveImage();
-                    imgSide.appendChild(singleImg);
-                    
-                    singleImg.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        currentImgIndex = (currentImgIndex + 1) % relatedImages.length;
+                    const isMobile = window.innerWidth <= 800;
+
+                    if (isMobile) {
+                        // Auf Mobile: Alle Bilder untereinander anzeigen zum normalen Durchscrollen
+                        imgSide.style.display = 'flex';
+                        imgSide.style.flexDirection = 'column';
+                        imgSide.style.gap = '20px';
+                        imgSide.style.overflow = 'visible';
+                        imgSide.style.height = 'auto';
+                        
+                        relatedImages.forEach(item => {
+                            const mobImg = document.createElement('img');
+                            mobImg.src = item.img.src;
+                            mobImg.alt = item.img.alt;
+                            mobImg.style.width = '100%';
+                            mobImg.style.height = 'auto';
+                            mobImg.style.objectFit = 'contain';
+                            imgSide.appendChild(mobImg);
+                        });
+                    } else {
+                        // Auf Desktop: Interaktives Einzelbild mit Klick / Mausrad
+                        const singleImg = document.createElement('img');
+                        singleImg.className = 'fullscreen-single-img';
+                        
+                        function updateActiveImage() {
+                            const item = relatedImages[currentImgIndex];
+                            singleImg.src = item.img.src;
+                            singleImg.alt = item.img.alt;
+                        }
                         updateActiveImage();
-                    });
-
-                    // Mausrad schaltet je nach Scroll-Richtung vor oder zurück
-                    imgSide.addEventListener('wheel', function(e) {
-                    e.preventDefault();
-    if (e.deltaY > 0) {
-        // Nach unten scrollen -> Nächstes Bild
-        currentImgIndex = (currentImgIndex + 1) % relatedImages.length;
-    } else {
-        // Nach oben scrollen -> Vorheriges Bild
-        currentImgIndex = (currentImgIndex - 1 + relatedImages.length) % relatedImages.length;
-    }
-    updateActiveImage();
-}, { passive: false });
-
-                    let touchStartX = 0;
-                    imgSide.addEventListener('touchstart', function(e) {
-                        touchStartX = e.touches[0].clientX;
-                    }, { passive: true });
-
-                    imgSide.addEventListener('touchend', function(e) {
-                        let touchEndX = e.changedTouches[0].clientX;
-                        let diff = touchStartX - touchEndX;
-                        if (Math.abs(diff) > 50) {
+                        imgSide.appendChild(singleImg);
+                        
+                        singleImg.addEventListener('click', function(e) {
+                            e.stopPropagation();
                             currentImgIndex = (currentImgIndex + 1) % relatedImages.length;
                             updateActiveImage();
-                        }
-                    }, { passive: true });
+                        });
+
+                        imgSide.addEventListener('wheel', function(e) {
+                            e.preventDefault();
+                            if (e.deltaY > 0) {
+                                currentImgIndex = (currentImgIndex + 1) % relatedImages.length;
+                            } else {
+                                currentImgIndex = (currentImgIndex - 1 + relatedImages.length) % relatedImages.length;
+                            }
+                            updateActiveImage();
+                        }, { passive: false });
+
+                        let touchStartX = 0;
+                        imgSide.addEventListener('touchstart', function(e) {
+                            touchStartX = e.touches[0].clientX;
+                        }, { passive: true });
+
+                        imgSide.addEventListener('touchend', function(e) {
+                            let touchEndX = e.changedTouches[0].clientX;
+                            let diff = touchStartX - touchEndX;
+                            if (Math.abs(diff) > 50) {
+                                currentImgIndex = (currentImgIndex + 1) % relatedImages.length;
+                                updateActiveImage();
+                            }
+                        }, { passive: true });
+                    }
                     
-                    // Reihenfolge im DOM: Zuerst Text, dann Bilder darunter
                     overlay.appendChild(textSide);
                     overlay.appendChild(imgSide);
                     
@@ -409,25 +428,26 @@
     
     <div class="img-columns">
         <!-- Projekt 2101 -->
-        <div class="img-hover-container"><img src="img/INDEX_2101_01.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2101_02.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2101_03.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2101_01.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2101_02.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2101_03.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2101_04.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2101_05.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2101_06.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2101_07.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2101_08.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2101_09.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2101_10.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2101_08.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2101_09.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2101_10.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2101 HAUS FÜR ZWEI BRÜDER<br/>Idre Fjäll, Dalarna, Schweden</span><span class="lang-sv-block" style="display:none;">2101 Hus för två bröder<br/>Idre Fjäll, Dalarna</span></div></div>
 
         <!-- Projekt 2403 -->
         <div class="img-hover-container"><img src="img/INDEX_2403_01.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2403_02.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2403_02.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2403_03.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2403_04.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2403_05.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2403_06.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2403_07.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2403_07.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2403_08.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2403 DER HOLLÄNDER<br/>Musikschule Cham, Wettbewerb<br/>Cham, Zug, Schweiz</span><span class="lang-sv-block" style="display:none;">2403 DER HOLLÄNDER<br/>Musikskola Cham, Tävling<br/>Cham, Zug, Schweiz</span></div></div>
 
         <!-- Projekt 2405 Die Säulenhalle -->
         <div class="img-hover-container"><img src="img/INDEX_2405_01.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2405 DIE SÄULENHALLE<br/>Zentrum für Zürich West, Themenheft Hochparterre<br/>Zürich, Schweiz</span><span class="lang-sv-block" style="display:none;">2405 DIE SÄULENHALLE<br/>Ett centrum för Zürich West, Temanummer Hochparterre<br/>Zürich, Schweiz</span></div></div>
@@ -437,30 +457,38 @@
         <div class="img-hover-container"><img src="img/INDEX_2405_05.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">2405 DIE SÄULENHALLE<br/>Zentrum für Zürich West, Themenheft Hochparterre<br/>Zürich, Schweiz</span><span class="lang-sv-block" style="display:none;">2405 DIE SÄULENHALLE<br/>Ett centrum för Zürich West, Temanummer Hochparterre<br/>Zürich, Schweiz</span></div></div>
 
         <!-- Projekt 2406 -->
-        <div class="img-hover-container"><img src="img/INDEX_2406_01.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2406_02.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2406_01.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2406_02.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2406_03.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2406_04.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2406_05.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2406_06.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2406_07.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2406_06.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2406_07.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2406_08.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2406_09.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2406_10.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2406_09.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2406_10.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2406_11.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2406_12.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2406_13.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2406_12.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">FH SAMUN<br/>Renovation eines Ferienhauses, In Planung<br/>Falera, Graubünden, Schweiz</span><span class="lang-sv-block" style="display:none;">FH SAMUN<br/>Renovation av ett fritidshus, Planeras<br/>Falera, Graubünden, Schweiz</span></div></div>
 
-        <!-- Projekt 2605 -->
-        <div class="img-hover-container"><img src="img/INDEX_2605_01.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2605_02.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2605_03.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2605_04.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2605_05.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2605_06.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2605_07.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2605_08.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2605_09.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <!-- Projekt 2502 Gottsunda Skog -->
+        <div class="img-hover-container"><img src="img/INDEX_2502_01.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2502_02.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2502_03.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2502_04.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2502_05.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2502_06.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
+
+        <!-- Projekt 2506 (Fiesch) -->
+        <div class="img-hover-container"><img src="img/INDEX_2506_01.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2506_02.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2506_03.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2506_04.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2506_05.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2506_06.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2506_07.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2506_08.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2506_09.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2506_10.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">ZWISCHEN HAUS UND DORF<br/>Alters-, Pflege- und Wohnheim, Wettbewerb<br/>Fiesch, Wallis, Schweiz</span><span class="lang-sv-block" style="display:none;">MELLAN HUS OCH BY<br/>Äldreboende, Tävling<br/>Fiesch, Wallis, Schweiz</span></div></div>
 
         <!-- Projekt 2602 LEPUS -->
         <div class="img-hover-container"><img src="img/INDEX_2602_01.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span><span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span></div></div>
@@ -473,14 +501,8 @@
         <div class="img-hover-container"><img src="img/INDEX_2602_08.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span><span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2602_09.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span><span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span></div></div>
         <div class="img-hover-container"><img src="img/INDEX_2602_10.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span><span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span></div></div>
-
-        <!-- Projekt 2502 Gottsunda Skog -->
-        <div class="img-hover-container"><img src="img/INDEX_2502_01.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2502_02.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2502_03.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2502_04.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2502_05.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
-        <div class="img-hover-container"><img src="img/INDEX_2502_06.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span><span class="lang-sv-block" style="display:none;">GOTTSUNDA SKOG<br/>600 nya bostäder och ombyggnad av köpcentrum, Tävling<br/>Gottsunda, Uppsala, Schweden</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2602_11.png" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span><span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span></div></div>
+        <div class="img-hover-container"><img src="img/INDEX_2602_12.gif" alt="LINYER Bild" class="hover-img" /><div class="img-hover-text"><span class="lang-de-block">LEPUS<br/>Zuhause für Menschen mit Behinderung, Wettbewerb<br/>Wigoltingen, Thurgau, Schweiz</span><span class="lang-sv-block" style="display:none;">LEPUS<br/>Hem för personer med funktionsnedsättning, Tävling<br/>Wigoltingen, Thurgau, Schweiz</span></div></div>
     </div>
 </body>
 </html>
