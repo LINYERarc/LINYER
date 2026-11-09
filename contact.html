@@ -5,15 +5,14 @@
     <title id="page-title">LINYER Architektur</title>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta name="description" content="LINYER ist ein Architekturbüro in Stockholm und Zürich, betrieben von Emma Lindén und Lowis Gujer." />
+    
+    <!-- Open Graph Meta Tags (Social Media) -->
+    <meta property="og:title" content="LINYER Architektur">
+    <meta property="og:description" content="LINYER ist ein Architekturbüro in Stockholm und Zürich, betrieben von Emma Lindén und Lowis Gujer.">
+    <meta property="og:image" content="img/CONTACT_Emma.gif">
+    <meta property="og:url" content="https://linyer.info">
+
     <link rel="stylesheet" href="index.css">
-    <style>
-        /* Spezifische Anpassung für Mobile: Text zuerst, Bilder danach */
-        @media (max-width: 800px) {
-            .contact-container {
-                flex-direction: column !important;
-            }
-        }
-    </style>
     <script>
         function switchLang(lang) {
             const root = document.getElementById('html-root');
@@ -34,87 +33,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const savedLang = localStorage.getItem('linyer_lang') || 'de';
             switchLang(savedLang);
-
-            // Kontaktbilder-Interaktion (Scrollen schaltet immer vorwärts auf Desktop, untereinander auf Mobile)
-            const contactImages = [
-                { src: 'img/CONTACT_Lowis.gif', alt: 'Lowis Gujer' },
-                { src: 'img/CONTACT_Emma.gif', alt: 'Emma Lindén' }
-            ];
-            let currentContactImgIndex = 0;
-
-            const rightSide = document.querySelector('.contact-right');
-            if (rightSide) {
-                if (window.innerWidth <= 800) {
-                    // Auf Mobile: Beide Bilder untereinander zum normalen Durchscrollen
-                    rightSide.innerHTML = '';
-                    rightSide.style.display = 'flex';
-                    rightSide.style.flexDirection = 'column';
-                    rightSide.style.gap = '20px';
-                    rightSide.style.overflowY = 'visible';
-                    rightSide.style.height = 'auto';
-
-                    contactImages.forEach(item => {
-                        const singleImg = document.createElement('img');
-                        singleImg.src = item.src;
-                        singleImg.alt = item.alt;
-                        singleImg.style.width = '100%';
-                        singleImg.style.height = 'auto';
-                        singleImg.style.objectFit = 'contain';
-                        rightSide.appendChild(singleImg);
-                    });
-                } else {
-                    // Auf Desktop: Interaktives Einzelbild mit Klick / Mausrad / Touch
-                    rightSide.innerHTML = '';
-                    rightSide.style.display = 'flex';
-                    rightSide.style.flexDirection = 'column';
-                    rightSide.style.justifyContent = 'center';
-                    rightSide.style.alignItems = 'center';
-                    rightSide.style.overflow = 'hidden';
-                    rightSide.style.height = '100%';
-
-                    const singleImg = document.createElement('img');
-                    singleImg.className = 'fullscreen-single-img';
-                    
-                    function updateContactImage() {
-                        const item = contactImages[currentContactImgIndex];
-                        singleImg.src = item.src;
-                        singleImg.alt = item.alt;
-                    }
-                    updateContactImage();
-                    rightSide.appendChild(singleImg);
-
-                    singleImg.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
-                        updateContactImage();
-                    });
-
-                    // Mausrad schaltet je nach Scroll-Richtung vor oder zurück
-                    rightSide.addEventListener('wheel', function(e) {
-                        e.preventDefault();
-                        if (e.deltaY > 0) {
-                            currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
-                        } else {
-                            currentContactImgIndex = (currentContactImgIndex - 1 + contactImages.length) % contactImages.length;
-                        }
-                        updateContactImage();
-                    }, { passive: false });
-
-                    let touchStartX = 0;
-                    rightSide.addEventListener('touchstart', function(e) {
-                        touchStartX = e.touches[0].clientX;
-                    }, { passive: true });
-
-                    rightSide.addEventListener('touchend', function(e) {
-                        let touchEndX = e.changedTouches[0].clientX;
-                        let diff = touchStartX - touchEndX;
-                        if (Math.abs(diff) > 50) {
-                            currentContactImgIndex = (currentContactImgIndex + 1) % contactImages.length;
-                            updateContactImage();
-                        }
-                    }, { passive: true });
-                }
-            }
         });
     </script>
 </head>
@@ -141,7 +59,7 @@
     </div>
     
     <div class="contact-container">
-        <!-- Linke Spalte: Gesamter Text (DE & SV) -->
+        <!-- Linke Spalte (1/3): Gesamter Text (DE & SV) -->
         <div class="contact-left">
             <div class="lang-de-block">
                 LINYER ist ein Architekturbüro, gegründet und betrieben seit 2024, welches in Stockholm und Zürich operiert. 
@@ -150,7 +68,7 @@
                 <br/><br/>  
                 Emma Lindén ist Architektin SAR/MSA. Während ihres Studiums an der Königlichen Technischen Hochschule Stockholm absolvierte sie ein Austauschjahr an der ETHZ. Sie arbeitete für General Architecture, Lütjens Padmanabhan, Maich Swift und Boltshauser Architekten.
                 <br/><br/>
-                Lowis Gujer ist Architekt MSc Arch. ETHZ. He schloss sein Studium an der ETHZ 2023. Nach Erfahrungen in Architekturbüros in Zürich, Stockholm und London arbeitet er seit Anfang 2024 am Lehrstuhl für Architectural Behaviorology und lehrt für Prof. Momoyo Kaijima Entwurf.
+                Lowis Gujer ist Architekt MSc Arch. ETHZ. Er schloss sein Studium an der ETHZ 2023. Nach Erfahrungen in Architekturbüros in Zürich, Stockholm und London arbeitet er seit Anfang 2024 am Lehrstuhl für Architectural Behaviorology und lehrt für Prof. Momoyo Kaijima Entwurf.
                 <br/><br/>
                 contact@linyer.info<br/>
                 +41 76 220 62 84<br/>
@@ -218,7 +136,7 @@
                 2401 Wandler<br/>Stadshus, Romanshorn, Thurgau<br/>Tävling 2024<br/>Beställare: Stadt Romanshorn<br/><br/>
                 2202 Älvsala<br/>Om- och tillbyggnad av fritidshus, Älvsala, Värmdö<br/>Studie 2022 <br/>Beställare: Privat<br/><br/>
                 2201 Björkvik<br/>Om- och tillbyggnad av fritidshus, Björkvik, Värmdö<br/>Studie 2022<br/>Beställare: Privat<br/><br/>
-                2101 Hus för två bröder<br/>Fritidshus i massivt timmer, Idre Fjäll, Dalarna<br/>Färdigställt 2025<br/>Beställare: Privat<br/><br/><br/>
+                2101 Hus för två bröder<br/>Fritidshus i massiv timmer, Idre Fjäll, Dalarna<br/>Färdigställt 2025<br/>Beställare: Privat<br/><br/><br/>
 
                 <strong>UNDERVISNING</strong><br/><br/>
                 <a href="https://kaijima.arch.ethz.ch/news/call-for-entries-japan-studio-iii-seminar-week-25hs-feldis-veulden/">JAPAN STUDIO 3 "STONE, WOOD, SOIL"</a><br/>Undervisningsassistent för masterkursen i design vid Chair of Architectural Behaviorology, D-ARCH, ETHZ, 2025<br/><br/>
@@ -239,8 +157,15 @@
             </div>
         </div>
         
-        <!-- Rechte Spalte: Interaktive/Scrollbare Bilder -->
-        <div class="contact-right"></div>
+        <!-- Mittlere Spalte (1/3): Bild Emma -->
+        <div class="contact-img-col">
+            <img src="img/CONTACT_Emma.gif" alt="Emma Lindén" class="contact-static-img">
+        </div>
+
+        <!-- Rechte Spalte (1/3): Bild Lowis -->
+        <div class="contact-img-col">
+            <img src="img/CONTACT_Lowis.gif" alt="Lowis Gujer" class="contact-static-img">
+        </div>
     </div>
 </body>
 </html>
